@@ -1,0 +1,9 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "codezombiech.gitignore",
+    "esbenp.prettier-vscode",
+    "svelte.svelte-vscode",
+    "EditorConfig.EditorConfig"
+  ]
+}

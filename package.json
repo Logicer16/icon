@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "name": "@logicer/icon",
+  "version": "0.0.1",
+  "description": "Logicer's Icon Generator",
+  "private": true,
+  "scripts": {
+    "dev": "vite dev --open",
+    "build": "vite build",
+    "preview": "vite preview --open",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+    "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+    "style": "npm run lint && npm run prettier",
+    "lint": "eslint . --fix",
+    "lint:ci": "eslint .",
+    "prettier": "prettier --write --plugin prettier-plugin-svelte .",
+    "prettier:ci": "prettier --check --plugin prettier-plugin-svelte ."
+  },
+  "devDependencies": {
+    "@logicer/eslint-plugin": "^2.0.2",
+    "@logicer/prettier-config": "^2.0.2",
+    "@logicer/tsconfig": "^3.0.0",
+    "@sveltejs/adapter-static": "^2.0.3",
+    "@sveltejs/kit": "^1.26.0",
+    "@typescript-eslint/eslint-plugin": "^6.8.0",
+    "@typescript-eslint/parser": "^6.8.0",
+    "@vite-pwa/sveltekit": "^0.2.7",
+    "eslint": "^8.52.0",
+    "eslint-config-prettier": "^8.10.0",
+    "eslint-plugin-prettier": "^5.0.1",
+    "eslint-plugin-svelte": "^2.34.0",
+    "prettier": "3.0.2",
+    "prettier-plugin-svelte": "^3.0.3",
+    "sass": "^1.69.4",
+    "svelte": "^4.2.2",
+    "svelte-check": "^3.5.2",
+    "tslib": "^2.6.2",
+    "typescript": "^5.2.2",
+    "typescript-svelte-plugin": "^0.3.34",
+    "vite": "^4.5.0",
+    "vite-plugin-pwa": "^0.16.5",
+    "workbox-window": "^7.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Logicer16/icon.git"
+  },
+  "author": "logicer",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Logicer16/icon/issues"
+  },
+  "homepage": "https://github.com/Logicer16/icon#readme",
+  "engines": {
+    "node": "^20.8.0"
+  },
+  "type": "module"
+}

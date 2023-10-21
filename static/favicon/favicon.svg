@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	viewBox="0 0 256 256" style="enable-background:new 0 0 256 256;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#558B2F;}
+</style>
+<g id="Outline">
+	<rect x="80" y="16" width="96" height="16"/>
+	<rect x="48" y="32" width="32" height="16"/>
+	<rect x="32" y="48" width="16" height="32"/>
+	<rect x="16" y="80" width="16" height="96"/>
+	<rect x="64" y="96" width="32" height="64"/>
+	<rect x="32" y="176" width="16" height="48"/>
+	<rect x="48" y="224" width="48" height="16"/>
+	<rect x="96" y="208" width="64" height="16"/>
+	<rect x="160" y="224" width="48" height="16"/>
+	<rect x="208" y="176" width="16" height="48"/>
+	<rect x="224" y="80" width="16" height="96"/>
+	<rect x="208" y="48" width="16" height="32"/>
+	<rect x="176" y="32" width="32" height="16"/>
+	<rect x="160" y="96" width="32" height="64"/>
+</g>
+<g id="Fill">
+	<path class="st0" d="
+	M208,80V48H176V32H80V48H48V80H32V176H48V224H96V208H160V224H208V176H224V80H208z
+	M96,160 H64V96H96V160z
+	M192,160 H160V96H192V160z"/>
+</g>
+</svg>
