@@ -1,4 +1,5 @@
 <script lang="ts">
+  import "../app.postcss";
   import {description, themeColour, title} from "$lib/const";
   import {pwaInfo} from "virtual:pwa-info";
 
@@ -16,6 +17,6 @@
   <slot />
 </main>
 
-{#await import("$lib/ReloadPrompt/ReloadPrompt.svelte") then { default: ReloadPrompt }}
-  <ReloadPrompt />
-{/await}
+<!-- {#await import("$lib/ReloadPrompt/ReloadPrompt.svelte") then { default: ReloadPrompt }}
+  <ReloadPrompt></ReloadPrompt>
+{/await} -->

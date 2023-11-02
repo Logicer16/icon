@@ -59,6 +59,7 @@ jobs:
           path: "build/"
 
   Publish:
+    if: github.event_name != 'pull_request'
     needs: Build
     runs-on: ubuntu-latest
 

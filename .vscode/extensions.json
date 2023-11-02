@@ -4,6 +4,7 @@
     "codezombiech.gitignore",
     "esbenp.prettier-vscode",
     "svelte.svelte-vscode",
-    "EditorConfig.EditorConfig"
+    "editorconfig.editorconfig",
+    "csstools.postcss"
   ]
 }

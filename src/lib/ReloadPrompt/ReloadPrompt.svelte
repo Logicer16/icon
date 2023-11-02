@@ -1,5 +1,6 @@
 <script lang="ts">
   import "./ReloadPrompt.scss";
+  import {ServiceWorkerMessageTypes} from "$lib/serviceWorkerMessages";
   import {useRegisterSW} from "virtual:pwa-register/svelte";
 
   const {needRefresh, updateServiceWorker, offlineReady} = useRegisterSW({
@@ -7,19 +8,31 @@
       console.error(`Could not register service worker with error: ${error}`);
     },
     onRegisteredSW(swScriptUrl, registration) {
+      if (registration === undefined) return;
+      navigator.serviceWorker.controller?.postMessage({
+        type: ServiceWorkerMessageTypes.coepCredentialless,
+        value: "chrome" in window || "netscape" in window
+      });
+
       // Check for updates
-      if (registration !== undefined) {
-        setInterval(() => {
-          console.log("Checking for sw update");
-          registration.update().catch((error) => {
-            console.error(
-              `Could not register service worker with error: ${error}`
-            );
-          });
-        }, 60000 /* 1m */);
-        console.log(
-          `Successfully registered service worker at url: ${swScriptUrl}`
-        );
+      setInterval(() => {
+        console.log("Checking for sw update");
+        registration.update().catch((error) => {
+          console.error(
+            `Could not register service worker with error: ${error}`
+          );
+        });
+      }, 60000 /* 1m */);
+
+      console.log(
+        `Successfully registered service worker at url: ${swScriptUrl}, for scope: ${registration.scope}`
+      );
+
+      // If the registration is active, but it's not controlling the page
+      if (registration.active && navigator.serviceWorker.controller === null) {
+        refresh().catch((error) => {
+          throw error;
+        });
       }
     }
   });

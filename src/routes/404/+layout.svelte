@@ -3,6 +3,4 @@
   <meta name="description" content="" />
 </svelte:head>
 
-<main>
-  <slot />
-</main>
+<slot />

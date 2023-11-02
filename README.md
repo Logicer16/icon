@@ -1,38 +1,48 @@
-# create-svelte
+# Logicer's Icon Generator
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+Generate colour variations of [Logicer](https://github.com/Logicer16)'s icon in formats and sizes of your choice.
 
-## Creating a project
+Designed to be deployed on GitHub Pages.
+
+[Go to the site](https://icon.logicer.cc/)
+
+## Install
 
 If you're seeing this, you've probably already done this step. Congrats!
 
 ```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
-```
-
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+git clone https://github.com/Logicer16/icon
+cd icon
+pnpm install
 ```
 
 ## Building
 
-To create a production version of your app:
+To build a production version:
 
 ```bash
-npm run build
+pnpm build
 ```
 
-You can preview the production build with `npm run preview`.
+To preview this build:
 
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+```bash
+pnpm preview
+```
+
+## Debugging
+
+To start a development server:
+
+```bash
+pnpm dev
+```
+
+To view the server's content once the server has successfully started:
+```bash
+pnpm dev --open
+```
+
+## Deploy
+
+GitHub Actions will automatically deploy change on each commit to main

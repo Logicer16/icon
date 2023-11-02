@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "@logicer/tsconfig",
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "noEmit": true
+  }
+}
