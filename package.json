@@ -8,7 +8,8 @@
     "dev": "vite dev",
     "dev:open": "vite dev --open",
     "build": "vite build",
-    "preview": "vite preview --open",
+    "preview": "vite preview",
+    "preview:open": "vite preview --open",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
     "style": "npm run lint && npm run prettier",
@@ -27,7 +28,6 @@
     "@skeletonlabs/tw-plugin": "^0.2.3",
     "@sveltejs/adapter-static": "^2.0.3",
     "@sveltejs/kit": "^1.26.0",
-    "@types/node": "^20.8.10",
     "@typescript-eslint/eslint-plugin": "^6.8.0",
     "@typescript-eslint/parser": "^6.8.0",
     "@vite-pwa/sveltekit": "^0.2.7",
@@ -50,8 +50,12 @@
     "typescript": "^5.2.2",
     "typescript-svelte-plugin": "^0.3.34",
     "vite": "^4.5.0",
+    "vite-plugin-node-polyfills": "^0.15.0",
     "vite-plugin-pwa": "^0.16.5",
+    "vite-plugin-static-copy": "^0.17.0",
     "vite-plugin-tailwind-purgecss": "^0.1.3",
+    "vite-plugin-top-level-await": "^1.3.1",
+    "wasm-vips": "^0.0.5",
     "workbox-precaching": "^7.0.0"
   },
   "repository": {
@@ -67,8 +71,5 @@
   "engines": {
     "node": "^20.8.0"
   },
-  "type": "module",
-  "dependencies": {
-    "coi-serviceworker": "^0.1.7"
-  }
+  "type": "module"
 }

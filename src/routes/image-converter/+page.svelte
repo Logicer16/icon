@@ -1,10 +1,14 @@
 <script lang="ts">
   import {ProgressRadial} from "@skeletonlabs/skeleton";
+  import {vips} from "$lib/vips/vips";
+
   const value = undefined;
 
   async function run(): Promise<void> {
+    if (vips === undefined) return;
     const svg = await (await fetch("/favicon/favicon.svg")).arrayBuffer();
     console.log(svg);
+    console.log(vips.version());
   }
 </script>
 
