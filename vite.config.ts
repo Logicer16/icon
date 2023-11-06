@@ -1,4 +1,5 @@
 import {defineConfig} from "vite";
+import {dirname} from "path";
 import {nodePolyfills} from "vite-plugin-node-polyfills";
 import {purgeCss} from "vite-plugin-tailwind-purgecss";
 import {sveltekit} from "@sveltejs/kit/vite";
@@ -19,7 +20,7 @@ const extensions = [
   "json"
 ].join(",");
 
-console.log(import.meta.resolve("wasm-vips"));
+const vipsPath = dirname(new URL(import.meta.resolve("wasm-vips")).pathname);
 
 export default defineConfig({
   // For service worker:
@@ -51,7 +52,7 @@ export default defineConfig({
       targets: [
         {
           dest: "vips",
-          src: "node_modules/wasm-vips/lib/vips{{,-es6}{,.worker}.js,*.wasm}"
+          src: `${vipsPath}/vips{{,-es6}{,.worker}.js,*.wasm}`
         }
       ]
     }),
