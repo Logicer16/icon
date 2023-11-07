@@ -5,6 +5,7 @@
   "description": "Logicer's Icon Generator",
   "private": true,
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
     "dev": "vite dev",
     "dev:open": "vite dev --open",
     "build": "vite build",
