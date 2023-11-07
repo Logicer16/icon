@@ -1,0 +1,82 @@
+// Inspired by:
+// https://github.com/fi3ework/vite-plugin-checker/issues/95
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "npm",
+      "script": "dev",
+      "isBackground": true,
+      "problemMatcher": [
+        {
+          "owner": "typescript",
+          "source": "Typescript",
+          "fileLocation": "absolute",
+          "applyTo": "allDocuments",
+          "background": {
+            "activeOnStart": true,
+            "beginsPattern": "^\\d{1,2}:\\d{1,2}:\\d{1,2}(?: AM| PM)? \\[vite\\] \\S+ changed, restarting server\\.\\.\\.",
+            "endsPattern": "^\\s*(?:VITE v\\d+\\.\\d+\\.\\d+\\s+ready in \\d+|\\d{1,2}:\\d{1,2}:\\d{1,2} (?:AM|PM)? \\[vite\\] server restarted\\.)"
+          },
+          "pattern": [
+            {
+              "regexp": "(ERROR|WARNING)\\(TypeScript\\)  (.*)",
+              "severity": 1,
+              "message": 2
+            },
+            {
+              "regexp": "^ FILE  (.*):(\\d*):(\\d*)$",
+              "file": 1,
+              "line": 2,
+              "column": 3
+            }
+          ]
+        }
+      ],
+      "label": "npm: dev",
+      "detail": "vite dev"
+    },
+    {
+      "type": "npm",
+      "script": "build",
+      "group": "build",
+      "problemMatcher": [],
+      "label": "npm: build",
+      "detail": "vite build"
+    },
+    {
+      "type": "npm",
+      "script": "preview",
+      "isBackground": true,
+      "problemMatcher": [
+        {
+          "owner": "typescript",
+          "source": "Typescript",
+          "fileLocation": "absolute",
+          "applyTo": "allDocuments",
+          "background": {
+            "activeOnStart": true,
+            "beginsPattern": ".",
+            "endsPattern": "."
+          },
+          "pattern": [
+            {
+              "regexp": "(ERROR|WARNING)\\(TypeScript\\)  (.*)",
+              "severity": 1,
+              "message": 2
+            },
+            {
+              "regexp": "^ FILE  (.*):(\\d*):(\\d*)$",
+              "file": 1,
+              "line": 2,
+              "column": 3
+            }
+          ]
+        }
+      ],
+      "label": "npm: preview",
+      "detail": "vite preview",
+      "dependsOn": ["npm: build"]
+    }
+  ]
+}

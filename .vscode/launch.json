@@ -1,0 +1,62 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch Edge With Dev Server",
+      "request": "launch",
+      "type": "msedge",
+      "url": "http://localhost:5173",
+      "smartStep": true,
+      "preLaunchTask": "npm: dev"
+    },
+    {
+      "name": "Launch Edge With Production Server",
+      "request": "launch",
+      "type": "msedge",
+      "url": "http://localhost:4173",
+      "smartStep": true,
+      "preLaunchTask": "npm: preview"
+    },
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Launch Chrome With Dev Server",
+      "url": "http://localhost:5173",
+      "smartStep": true,
+      "preLaunchTask": "npm: dev"
+    },
+    {
+      "type": "chrome",
+      "request": "launch",
+      "name": "Launch Chrome With Production Server",
+      "url": "http://localhost:4173",
+      "smartStep": true,
+      "preLaunchTask": "npm: preview"
+    },
+    {
+      "type": "firefox",
+      "request": "launch",
+      "name": "Launch Firefox With Dev Server",
+      "url": "http://localhost:5173",
+      "reAttach": true,
+      "preLaunchTask": "npm: dev",
+      "pathMappings": [
+        {
+          "url": "http://localhost:5173",
+          "path": "${workspaceFolder}"
+        }
+      ]
+    },
+    {
+      "type": "firefox",
+      "request": "launch",
+      "name": "Launch Firefox With Production Server",
+      "url": "http://localhost:4173",
+      "reAttach": true,
+      "preLaunchTask": "npm: preview"
+    }
+  ]
+}

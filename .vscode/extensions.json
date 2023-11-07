@@ -5,6 +5,7 @@
     "esbenp.prettier-vscode",
     "svelte.svelte-vscode",
     "editorconfig.editorconfig",
-    "csstools.postcss"
+    "csstools.postcss",
+    "firefox-devtools.vscode-firefox-debug"
   ]
 }
