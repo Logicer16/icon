@@ -19,7 +19,7 @@
     "prettier:ci": "prettier --check --plugin prettier-plugin-svelte ."
   },
   "devDependencies": {
-    "@logicer/eslint-plugin": "^2.0.2",
+    "@logicer/eslint-plugin": "^2.1.0",
     "@logicer/prettier-config": "^2.0.2",
     "@logicer/tsconfig": "^3.0.0",
     "@primer/octicons": "^19.8.0",
