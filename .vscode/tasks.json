@@ -56,7 +56,7 @@
           "applyTo": "allDocuments",
           "background": {
             "activeOnStart": true,
-            "beginsPattern": ".",
+            "beginsPattern": "[]",
             "endsPattern": "."
           },
           "pattern": [
