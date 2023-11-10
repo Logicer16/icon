@@ -17,9 +17,16 @@ async function injectScript(scriptSrc: string): Promise<void> {
 // eslint-disable-next-line @typescript-eslint/naming-convention
 declare const Vips: typeof VipsType;
 
-export const vips: typeof Vips | undefined =
-  !import.meta.env.SSR && window.crossOriginIsolated
-    ? await injectScript(`${assets}/vips/vips.js`).then(async () => {
-        return Vips();
-      })
-    : undefined;
+export let vips: typeof Vips | undefined;
+if (!import.meta.env.SSR && window.crossOriginIsolated) {
+  injectScript(`${assets}/vips/vips.js`)
+    .then(async () => {
+      return Vips();
+    })
+    .then((newVips) => {
+      vips = newVips;
+    })
+    .catch((error) => {
+      throw error;
+    });
+}
