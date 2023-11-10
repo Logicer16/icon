@@ -149,9 +149,10 @@ self.addEventListener("fetch", (event) => {
       }
     }
 
-    console.warn(
-      `Requested to fetch external resource at: ${event.request.url}\nThis resource will not be cached for offline use.`
-    );
+    if (process.env.NODE_ENV === "production")
+      console.warn(
+        `Requested to fetch external resource at: ${event.request.url}\nThis resource will not be cached for offline use.`
+      );
     // Try an online request first, then fall back to the cache if we're offline
     // const externalCache = await caches.open(externalCacheId);
     // const cacheURL = formatPath(url.href, version);
