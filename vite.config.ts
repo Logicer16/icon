@@ -1,7 +1,9 @@
 import {defineConfig} from "vite";
 import {dirname} from "path";
+import {fileURLToPath} from "node:url";
 import {nodePolyfills} from "vite-plugin-node-polyfills";
 import {purgeCss} from "vite-plugin-tailwind-purgecss";
+import {serviceWorkerName} from "./src/lib/const.js";
 import {sveltekit} from "@sveltejs/kit/vite";
 import {SvelteKitPWA} from "@vite-pwa/sveltekit";
 import topLevelAwait from "vite-plugin-top-level-await";
@@ -20,7 +22,7 @@ const extensions = [
   "json"
 ].join(",");
 
-const vipsPath = dirname(new URL(import.meta.resolve("wasm-vips")).pathname);
+const vipsPath = dirname(fileURLToPath(import.meta.resolve("wasm-vips")));
 
 export default defineConfig({
   // For service worker:
@@ -36,11 +38,12 @@ export default defineConfig({
         enabled: true,
         type: "module"
       },
-      filename: "service-worker.ts",
+      filename: `${serviceWorkerName}.ts`,
       injectManifest: {
         globPatterns: [`client/**/*.{${extensions}}`],
         maximumFileSizeToCacheInBytes: 8 * Math.pow(1000, 2)
       },
+      injectRegister: null,
       manifest: webmanifest,
       minify: true,
       srcDir: "src",

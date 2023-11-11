@@ -1,6 +1,6 @@
 <script lang="ts">
   import "./ReloadPrompt.scss";
-  import {ServiceWorkerMessageTypes} from "$lib/serviceWorkerMessages";
+  import {ServiceWorkerMessageTypes} from "$lib/ServiceWorker/messages";
   import {useRegisterSW} from "virtual:pwa-register/svelte";
 
   const {needRefresh, updateServiceWorker, offlineReady} = useRegisterSW({

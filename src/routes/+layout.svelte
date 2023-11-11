@@ -1,7 +1,9 @@
 <script lang="ts">
   import "../app.postcss";
-  import {description, themeColour, title} from "$lib/const";
+  import {description, serviceWorkerName, themeColour, title} from "$lib/const";
   import {pwaInfo} from "virtual:pwa-info";
+
+  const serviceWorkerPath = `/${serviceWorkerName}.js`;
 
   $: webManifest = pwaInfo ? pwaInfo.webManifest.linkTag : "";
 </script>
@@ -11,6 +13,7 @@
   <title>{title}</title>
   <meta name="description" content="{description}" />
   <meta name="theme-color" content="{themeColour}" />
+  <script src="{serviceWorkerPath}"></script>
 </svelte:head>
 
 <main>
