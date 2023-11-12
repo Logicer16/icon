@@ -4,8 +4,11 @@
 /// <reference lib="webworker" />
 
 import "workbox-precaching";
+import {
+  ServiceWorkerClientMessageTypes,
+  ServiceWorkerMessageTypes
+} from "./lib/ServiceWorker/messages.js";
 import {registerServiceWorker} from "./lib/ServiceWorker/register.js";
-import {ServiceWorkerMessageTypes} from "./lib/ServiceWorker/messages.js";
 
 // import {version} from "$service-worker";
 
@@ -121,9 +124,7 @@ function serviceWorker(): void {
       }
     }
 
-    const promises = Promise.all([self.clients.claim(), pruneOldCaches()]);
-
-    event.waitUntil(promises);
+    event.waitUntil(pruneOldCaches());
   });
 
   self.addEventListener("message", (event) => {
@@ -133,9 +134,46 @@ function serviceWorker(): void {
     }
     if (!("type" in data)) return;
 
-    if (data.type === ServiceWorkerMessageTypes.coepCredentialless) {
-      if (!("value" in data) || typeof data.value !== "boolean") return;
-      coepCredentialless = data.value;
+    switch (data.type) {
+      case ServiceWorkerMessageTypes.coepCredentialless:
+        if (!("value" in data) || typeof data.value !== "boolean") break;
+        coepCredentialless = data.value;
+        break;
+
+      case ServiceWorkerMessageTypes.canReloadServiceWorker:
+        self.clients
+          .matchAll()
+          .then((clients) => {
+            clients.forEach((client) => {
+              client.postMessage({
+                type: ServiceWorkerClientMessageTypes.canReloadServiceWorker
+              });
+            });
+          })
+          .catch((error) => {
+            throw error;
+          });
+        break;
+
+      case ServiceWorkerMessageTypes.reloadServiceWorker:
+        self
+          .skipWaiting()
+          .then(async () => {
+            return self.clients.claim();
+          })
+          .then(async () => {
+            return self.clients.matchAll();
+          })
+          .then((clients) => {
+            clients.forEach((client) => {
+              client.postMessage({
+                type: ServiceWorkerClientMessageTypes.reloadClient
+              });
+            });
+          })
+          .catch((error) => {
+            throw error;
+          });
     }
   });
 

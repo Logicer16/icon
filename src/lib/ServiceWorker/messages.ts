@@ -1,3 +1,10 @@
 export enum ServiceWorkerMessageTypes {
-  coepCredentialless = "coepCredentialless"
+  coepCredentialless,
+  canReloadServiceWorker,
+  reloadServiceWorker
+}
+
+export enum ServiceWorkerClientMessageTypes {
+  canReloadServiceWorker,
+  reloadClient
 }
