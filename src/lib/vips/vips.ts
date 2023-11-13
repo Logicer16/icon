@@ -21,7 +21,9 @@ export let vips: typeof Vips | undefined;
 if (!import.meta.env.SSR && window.crossOriginIsolated) {
   injectScript(`${assets}/vips/vips.js`)
     .then(async () => {
-      return Vips();
+      return Vips({
+        dynamicLibraries: ["vips-heif.wasm", "vips-jxl.wasm", "vips-resvg.wasm"]
+      });
     })
     .then((newVips) => {
       vips = newVips;

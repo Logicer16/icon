@@ -1,4 +1,5 @@
 <script lang="ts">
+  import FileSaver from "file-saver";
   import {ProgressRadial} from "@skeletonlabs/skeleton";
   import {vips} from "$lib/vips/vips";
 
@@ -8,7 +9,9 @@
     if (vips === undefined) return;
     const svg = await (await fetch("/favicon/favicon.svg")).arrayBuffer();
     console.log(svg);
-    console.log(vips.version());
+    const png = vips.Image.svgloadBuffer(svg).writeToBuffer(".png");
+    const blob = new Blob([png]);
+    FileSaver(blob, "icon.png");
   }
 </script>
 
@@ -21,8 +24,8 @@
     track="stroke-primary-500/30"
     strokeLinecap="{'round'}">{value}%</ProgressRadial>
 
-  <button type="button" class="btn variant-soft" on:click="{run}">ico</button>
-  <button type="button" class="btn variant-soft">png</button>
+  <button type="button" class="btn variant-soft">ico</button>
+  <button type="button" class="btn variant-soft" on:click="{run}">png</button>
   <button type="button" class="btn variant-soft">jpeg</button>
   <button type="button" class="btn variant-soft">svg</button>
   <button type="button" class="btn variant-soft">icns</button>
