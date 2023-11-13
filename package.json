@@ -70,7 +70,19 @@
   },
   "homepage": "https://github.com/Logicer16/icon#readme",
   "engines": {
-    "node": "^20.8.0"
+    "node": "^20.8.0",
+    "pnpm": ">=8.10.0"
   },
-  "type": "module"
+  "type": "module",
+  "pnpm": {
+    "supportedArchitectures": {
+      "os": [
+        "current"
+      ],
+      "cpu": [
+        "wasm32",
+        "current"
+      ]
+    }
+  }
 }
