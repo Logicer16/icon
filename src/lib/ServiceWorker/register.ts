@@ -95,7 +95,7 @@ function onLoad(): void {
       clearInterval(updateCheckIntervalID);
       updateCheckIntervalID = setInterval(() => {
         checkForUpdate(registration);
-      }, 10 * 1000 /* 1m */);
+      }, 60 * 1000 /* 1m */);
 
       serviceWorker.addEventListener("statechange", () => {
         processServiceWorkerState(serviceWorker);
