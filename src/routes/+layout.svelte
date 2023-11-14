@@ -1,6 +1,7 @@
 <script lang="ts">
   import "../app.postcss";
   import {description, serviceWorkerName, themeColour, title} from "$lib/const";
+  import {autoModeWatcher} from "@skeletonlabs/skeleton";
   import {pwaInfo} from "virtual:pwa-info";
 
   const serviceWorkerPath = `/${serviceWorkerName}.js`;
@@ -15,6 +16,8 @@
   <meta name="description" content="{description}" />
   <meta name="theme-color" content="{themeColour}" />
   <script src="{serviceWorkerPath}" defer async type="{scriptType}"></script>
+  {@html `<` +
+    `script>${autoModeWatcher.toString()} autoModeWatcher();</script>`}
 </svelte:head>
 
 <main>
