@@ -1,8 +1,10 @@
 <script lang="ts">
   import "../app.postcss";
+  import {autoModeWatcher, initializeStores} from "@skeletonlabs/skeleton";
   import {description, serviceWorkerName, themeColour, title} from "$lib/const";
-  import {autoModeWatcher} from "@skeletonlabs/skeleton";
   import {pwaInfo} from "virtual:pwa-info";
+
+  initializeStores();
 
   const serviceWorkerPath = `/${serviceWorkerName}.js`;
   const scriptType = process.env.NODE_ENV !== "production" ? "module" : "";

@@ -1,21 +1,30 @@
 <script lang="ts">
-  import "./ReloadPrompt.scss";
+  import {
+    getToastStore,
+    Toast,
+    type ToastSettings
+  } from "@skeletonlabs/skeleton";
   import {
     registerReloadHandler,
     reloadServiceWorker
   } from "$lib/ServiceWorker/client";
-  import {writable} from "svelte/store";
 
-  let needRefresh = writable(false);
-  let needRefreshDismissed = writable(false);
+  const toastStore = getToastStore();
+  const toastSettings: ToastSettings = {
+    action: {
+      label: "Reload",
+      response: reload
+    },
+    autohide: false,
+    message: "New content is available. Reload now to update."
+  };
 
-  function close(): void {
-    needRefresh.set(false);
-    needRefreshDismissed.set(true);
-  }
+  let alreadyTriggered = false;
 
-  async function refresh(): Promise<void> {
-    return reloadServiceWorker();
+  function reload(): void {
+    reloadServiceWorker().catch((error) => {
+      throw error;
+    });
   }
 
   registerReloadHandler(
@@ -23,18 +32,14 @@
       window.location.reload();
     },
     () => {
-      needRefresh.set(true);
+      if (alreadyTriggered) return;
+      toastStore.trigger(toastSettings);
+      alreadyTriggered = true;
     }
   );
-  $: showToast = $needRefresh && !$needRefreshDismissed;
 </script>
 
-{#if showToast}
-  <div class="pwa-toast" role="alert">
-    <div class="message">
-      <span>New content available, reload now to update.</span>
-    </div>
-    <button on:click="{refresh}">Reload</button>
-    <button on:click="{close}"> Close </button>
-  </div>
-{/if}
+<Toast
+  position="br"
+  buttonDismiss="btn-icon btn-icon-sm variant-filled"
+  buttonAction="btn btn-sm variant-filled" />
