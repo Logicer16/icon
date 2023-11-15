@@ -35,12 +35,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Check
-        run: pnpm check --output machine
-        continue-on-error: true
-
       - name: Add Svelte Check annotator
         uses: prgm-dev/svelte-check-pr-annotator@main
+
+      - name: Check
+        run: pnpm check --output machine
 
       - name: Run ESLint
         run: pnpm lint:ci --output-file .eslint_report.json --format json
