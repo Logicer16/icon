@@ -45,7 +45,7 @@ jobs:
         run: pnpm lint:ci --output-file .eslint_report.json --format json
         continue-on-error: true
 
-      - name: Annotate Code Linting Results
+      - name: Annotate ESLint Results
         uses: ataylorme/eslint-annotate-action@v2
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
