@@ -31,6 +31,7 @@ pnpm preview
 ```
 
 To automatically open a browser once the server has successfully started:
+
 ```bash
 pnpm preview:open
 ```
@@ -44,6 +45,7 @@ pnpm dev
 ```
 
 To automatically open a browser once the server has successfully started:
+
 ```bash
 pnpm dev:open
 ```
