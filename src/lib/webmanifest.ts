@@ -142,7 +142,8 @@ export const webmanifest: SvelteKitPWAOptions["manifest"] = {
   ],
   id: startUrl,
   name: title,
-  short_name: "Logicer Icon",
+  scope: startUrl,
+  short_name: "Icon",
   start_url: startUrl,
   theme_color: themeColour
 };
