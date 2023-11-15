@@ -1,6 +1,6 @@
 # Logicer's Icon Generator
 
-Generate colour variations of [Logicer](https://github.com/Logicer16)'s icon in formats and sizes of your choice.
+Generate variations of [Logicer](https://github.com/Logicer16)'s icon in formats, sizes, and colours of your choice.
 
 Designed to be deployed on GitHub Pages.
 
@@ -30,6 +30,11 @@ To preview this build:
 pnpm preview
 ```
 
+To automatically open a browser once the server has successfully started:
+```bash
+pnpm preview:open
+```
+
 ## Debugging
 
 To start a development server:
@@ -38,9 +43,9 @@ To start a development server:
 pnpm dev
 ```
 
-To view the server's content once the server has successfully started:
+To automatically open a browser once the server has successfully started:
 ```bash
-pnpm dev --open
+pnpm dev:open
 ```
 
 ## Deploy
