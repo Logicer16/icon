@@ -1,8 +1,19 @@
 <script lang="ts">
   import "../app.postcss";
+  import {
+    arrow,
+    autoUpdate,
+    computePosition,
+    flip,
+    offset,
+    shift
+  } from "@floating-ui/dom";
   import {autoModeWatcher, initializeStores} from "@skeletonlabs/skeleton";
   import {description, serviceWorkerName, themeColour, title} from "$lib/const";
   import {pwaInfo} from "virtual:pwa-info";
+  import {storePopup} from "@skeletonlabs/skeleton";
+
+  storePopup.set({arrow, autoUpdate, computePosition, flip, offset, shift});
 
   initializeStores();
 

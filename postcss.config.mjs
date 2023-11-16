@@ -1,14 +1,9 @@
 import autoPrefixer from "autoprefixer";
-// import {Config} from "postcss-load-config";
 import tailWindCSS from "tailwindcss";
+import tailWindCSSNesting from "tailwindcss/nesting/index.js";
 
 const config = {
-  plugins: [
-    //Some plugins, like tailwindcss/nesting, need to run before Tailwind,
-    tailWindCSS(),
-    //But others, like autoprefixer, need to run after,
-    autoPrefixer()
-  ]
+  plugins: [tailWindCSSNesting(), tailWindCSS(), autoPrefixer()]
 };
 
 export default config;

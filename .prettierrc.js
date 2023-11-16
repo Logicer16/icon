@@ -5,7 +5,7 @@ import logicerPrettierConfig from "@logicer/prettier-config";
  */
 const prettierConfig = {
   ...logicerPrettierConfig,
-  plugins: ["prettier-plugin-svelte"],
+  plugins: ["prettier-plugin-svelte", "prettier-plugin-tailwindcss"],
   overrides: [{files: "*.svelte", options: {parser: "svelte"}}],
   svelteStrictMode: true
 };

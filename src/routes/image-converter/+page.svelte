@@ -1,44 +1,84 @@
 <script lang="ts">
+  import {
+    DownloadFormat,
+    type DownloadFormatOptions
+  } from "$lib/DownloadFormat";
   import {IconIcns, IconIco} from "@shockpkg/icon-encoder";
+  import {
+    ListBox,
+    ListBoxItem,
+    popup,
+    type PopupSettings,
+    ProgressRadial
+  } from "@skeletonlabs/skeleton";
+  import {browser} from "$app/environment";
   import FileSaver from "file-saver";
-  import {ProgressRadial} from "@skeletonlabs/skeleton";
   import {vips} from "$lib/vips/vips";
   import type Vips from "wasm-vips";
 
   const value = undefined;
 
-  interface DownloadFormat {
-    displayName?: string;
-    extension: string;
-    mime?: string;
+  type WellKnownDirectory =
+    | "desktop"
+    | "documents"
+    | "downloads"
+    | "music"
+    | "pictures"
+    | "videos";
+
+  interface ShowSaveFilePickerOptions {
+    excludeAcceptAllOption?: boolean;
+    id?: string;
+    startIn?: FileSystemHandle | WellKnownDirectory;
+    suggestedName?: string;
+    types?: {description?: string; accept: Record<string, string[]>}[];
   }
 
-  const downloadFormats: DownloadFormat[] = [
+  type ShowSaveFilePickerSignature = (
+    options: ShowSaveFilePickerOptions
+  ) => Promise<FileSystemFileHandle>;
+
+  const defaultDownloadFormats = "png";
+
+  const downloadFormatsOptions: DownloadFormatOptions[] = [
     {extension: "png"},
     {displayName: "jpeg", extension: "jpg", mime: "jpeg"},
-    {extension: "ico", mime: "x-icon"},
-    {extension: "icns", mime: "x-icns"},
-    {displayName: "jpeg xl", extension: "jxl"},
     {extension: "svg", mime: "svg+xml"},
     {extension: "gif"},
+    {extension: "webp"},
+    {displayName: "jpeg xl", extension: "jxl"},
+    {extension: "ico", mime: "x-icon"},
+    {extension: "icns", mime: "x-icns"},
     {extension: "avif"},
     // Unsupported due to GPL licencing.
     // {extension: "heif"},
-    {extension: "tiff"},
-    {extension: "webp"}
+    {extension: "tiff"}
     // {displayName: "jpeg 2000", extension: "jp2"}
   ];
 
-  type EventHandlerEvent<
-    E extends Event = Event,
-    T extends EventTarget = Element
-  > = E & {currentTarget: EventTarget & T};
+  const downloadFormats = downloadFormatsOptions.map((options) => {
+    return new DownloadFormat(options);
+  });
 
-  function getFormat(ext: string | undefined): DownloadFormat | undefined {
-    return downloadFormats.find((value) => {
-      return value.extension === ext;
-    });
-  }
+  let comboboxValue = defaultDownloadFormats;
+
+  const popupCombobox: PopupSettings = {
+    closeQuery: ".listbox-item",
+    event: "click",
+    placement: "bottom",
+    target: "popupCombobox"
+  };
+
+  const canUseFileSystemAPI =
+    browser &&
+    "showSaveFilePicker" in window &&
+    ((): boolean => {
+      try {
+        return window.self === window.top;
+      } catch {
+        return false;
+      }
+    })();
 
   async function ico(image: Vips.Image): Promise<Uint8Array> {
     const ico = new IconIco();
@@ -95,21 +135,19 @@
     return icns.encode();
   }
 
-  async function download(
-    event: EventHandlerEvent<MouseEvent, HTMLButtonElement>
-  ): Promise<void> {
-    if (vips === undefined) return;
-
+  async function getFile(): Promise<File | undefined> {
     const svg = await (await fetch("/favicon/favicon.svg")).arrayBuffer();
-    const target = event.target;
-    if (!(target instanceof HTMLButtonElement)) return;
-    const format = getFormat(target.dataset.downloadFormat);
+    const format = DownloadFormat.getFormatFromExtension(
+      downloadFormats,
+      comboboxValue
+    );
     if (format === undefined) return;
     let data: BlobPart | undefined;
-    const image = vips.Image.svgloadBuffer(svg);
     if (format.extension === "svg") {
       data = svg;
     } else {
+      if (vips === undefined) return;
+      const image = vips.Image.svgloadBuffer(svg);
       switch (format.extension) {
         case "ico":
           data = await ico(image);
@@ -142,13 +180,61 @@
       }
     }
     let file: File = new File([data], `icon.${format.extension}`, {
-      type: `image/${format.mime ?? format.extension}`
+      type: format.mime
     });
+    return file;
+  }
+
+  async function download(): Promise<void> {
+    const file = await getFile();
+    if (file === undefined) return;
     FileSaver(file);
+  }
+
+  async function saveAs(): Promise<void> {
+    if (!canUseFileSystemAPI) return;
+    const file = await getFile();
+    if (!("showSaveFilePicker" in window) || file === undefined) return;
+    const format = DownloadFormat.getFormatFromMime(downloadFormats, file.type);
+    if (format === undefined) return;
+
+    const showPicker = window.showSaveFilePicker as ShowSaveFilePickerSignature;
+    try {
+      // Show the file save dialog.
+      const handle = await showPicker({
+        suggestedName: file.name,
+        types: [
+          {
+            accept: {
+              [format.mime]: format.extensions.map((extension) => {
+                return `.${extension}`;
+              })
+            },
+            description: format.displayName
+          }
+        ]
+      });
+      // Write the blob to the file.
+      const writable = await handle.createWritable();
+      await writable.write(file);
+      await writable.close();
+      return;
+    } catch (error) {
+      // Fail silently if the user has simply canceled the dialog.
+      if (
+        !(
+          error instanceof Object &&
+          "name" in error &&
+          error.name === "AbortError"
+        )
+      ) {
+        throw error;
+      }
+    }
   }
 </script>
 
-<div class="container mx-auto p-8 space-y-8">
+<div class="container mx-auto space-x-2 space-y-8 p-8">
   <h1 class="h1">Image Conversion Test</h1>
   <ProgressRadial
     {value}
@@ -157,12 +243,33 @@
     track="stroke-primary-500/30"
     strokeLinecap="{'round'}">{value}%</ProgressRadial>
 
-  {#each downloadFormats as downloadFormat}
+  <div class="inline space-y-0">
     <button
-      type="button"
-      class="btn variant-soft mx-1"
-      on:click="{download}"
-      data-download-format="{downloadFormat.extension}"
-      >{downloadFormat.displayName ?? downloadFormat.extension}</button>
-  {/each}
+      class="variant-soft btn w-48 justify-between"
+      use:popup="{popupCombobox}">
+      <span
+        >{DownloadFormat.getFormatFromExtension(downloadFormats, comboboxValue)
+          ?.displayName}</span>
+      <span>↓</span>
+    </button>
+    <div
+      class="card max-h-64 w-48 overflow-y-scroll shadow-xl"
+      data-popup="popupCombobox">
+      <ListBox rounded="rounded-none">
+        {#each downloadFormats as downloadFormat}
+          <ListBoxItem
+            bind:group="{comboboxValue}"
+            name="medium"
+            value="{downloadFormat.extension}"
+            >{downloadFormat.displayName}</ListBoxItem>
+        {/each}
+      </ListBox>
+    </div>
+  </div>
+  <button type="button" class="variant-soft btn" on:click="{download}"
+    >Download</button>
+  {#if canUseFileSystemAPI}
+    <button type="button" class="variant-soft btn" on:click="{saveAs}"
+      >Save As</button>
+  {/if}
 </div>

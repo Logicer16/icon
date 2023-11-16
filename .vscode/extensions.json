@@ -6,6 +6,7 @@
     "svelte.svelte-vscode",
     "editorconfig.editorconfig",
     "csstools.postcss",
-    "firefox-devtools.vscode-firefox-debug"
+    "firefox-devtools.vscode-firefox-debug",
+    "bradlc.vscode-tailwindcss"
   ]
 }
