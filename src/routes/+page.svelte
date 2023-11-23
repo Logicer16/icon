@@ -1,19 +1,43 @@
 <script lang="ts">
-  import {title} from "$lib/const";
+  import {derived, writable, type Writable} from "svelte/store";
+  import {processSvg, type SVGData} from "$lib/svgManipulator";
+  import {themeColour, title} from "$lib/const";
+  import Download from "$lib/Download/Download.svelte";
+  import {onMount} from "svelte";
+  import SvgPreview from "$lib/SVGPreview/SVGPreview.svelte";
+
+  let fillColour: Writable<string> | undefined = writable(themeColour);
+
+  let rawSvg = writable<string>();
+  onMount(() => {
+    fetch("/favicon/favicon.svg")
+      .then(async (response) => {
+        return response.text();
+      })
+      .then((contents) => {
+        rawSvg.set(contents);
+      })
+      .catch((error) => {
+        throw error;
+      });
+  });
+
+  let svg = derived(
+    [rawSvg, fillColour],
+    ([$rawSvg, $fillColour], set: (value: SVGData) => void) => {
+      set(processSvg($rawSvg, {fillColour: $fillColour}));
+    }
+  );
 </script>
 
 <div class="container mx-auto space-y-8 p-8">
   <h1 class="h1">{title}</h1>
-  <p>
-    Go to the image converter test page <a
-      class="font-medium text-blue-600 hover:underline dark:text-blue-500"
-      href="/image-converter">here</a>
-  </p>
-  <!-- <section>
-    <a class="btn variant-filled-primary" href="https://kit.svelte.dev/"
-      >SvelteKit</a>
-    <a class="btn variant-filled-secondary" href="https://tailwindcss.com/"
-      >Tailwind</a>
-    <a class="btn variant-filled-tertiary" href="https://github.com/">GitHub</a>
-  </section> -->
+  <div class="w-80">
+    <SvgPreview svg="{$svg}"></SvgPreview>
+  </div>
+  {#if $fillColour !== ""}
+    <!-- This will throw an error regarding the format of the hex colour on page load. This has no real effect as it cannot occur. -->
+    <input type="color" name="fill" bind:value="{$fillColour}" />
+  {/if}
+  <Download svg="{$svg}"></Download>
 </div>

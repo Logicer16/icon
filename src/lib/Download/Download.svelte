@@ -13,8 +13,11 @@
   } from "@skeletonlabs/skeleton";
   import {browser} from "$app/environment";
   import FileSaver from "file-saver";
+  import type {SVGData} from "$lib/svgManipulator";
   import {vips} from "$lib/vips/vips";
   import type Vips from "wasm-vips";
+
+  export let svg: SVGData | undefined;
 
   const value = undefined;
 
@@ -136,12 +139,11 @@
   }
 
   async function getFile(): Promise<File | undefined> {
-    const svg = await (await fetch("/favicon/favicon.svg")).arrayBuffer();
     const format = DownloadFormat.getFormatFromExtension(
       downloadFormats,
       comboboxValue
     );
-    if (format === undefined) return;
+    if (format === undefined || svg === undefined) return;
     let data: BlobPart | undefined;
     if (format.extension === "svg") {
       data = svg;
@@ -234,8 +236,7 @@
   }
 </script>
 
-<div class="container mx-auto space-x-2 space-y-8 p-8">
-  <h1 class="h1">Image Conversion Test</h1>
+<div class="container mx-auto space-x-2 space-y-8">
   <ProgressRadial
     {value}
     stroke="{100}"
