@@ -1,4 +1,4 @@
-import {defineConfig} from "vite";
+import {defineConfig, normalizePath} from "vite";
 import {dirname} from "path";
 import {fileURLToPath} from "node:url";
 import {nodePolyfills} from "vite-plugin-node-polyfills";
@@ -22,7 +22,9 @@ const extensions = [
   "json"
 ].join(",");
 
-const vipsPath = dirname(fileURLToPath(import.meta.resolve("wasm-vips")));
+const vipsPath = normalizePath(
+  dirname(fileURLToPath(import.meta.resolve("wasm-vips")))
+);
 
 export default defineConfig({
   // For service worker:
