@@ -4,7 +4,7 @@ import {
   startupBackgroundColour,
   themeColour,
   title
-} from "./const.ts";
+} from "../const.ts";
 import type {SvelteKitPWAOptions} from "@vite-pwa/sveltekit/*";
 
 const startUrl = "/";

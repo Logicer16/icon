@@ -2,14 +2,13 @@
   import {
     DownloadFormat,
     type DownloadFormatOptions
-  } from "$lib/DownloadFormat";
+  } from "$lib/Download/DownloadFormat";
   import {IconIcns, IconIco} from "@shockpkg/icon-encoder";
   import {
     ListBox,
     ListBoxItem,
     popup,
-    type PopupSettings,
-    ProgressRadial
+    type PopupSettings
   } from "@skeletonlabs/skeleton";
   import {browser} from "$app/environment";
   import FileSaver from "file-saver";
@@ -18,8 +17,6 @@
   import type Vips from "wasm-vips";
 
   export let svg: SVGData | undefined;
-
-  const value = undefined;
 
   type WellKnownDirectory =
     | "desktop"
@@ -83,6 +80,8 @@
       }
     })();
 
+  const canUseClipboardAPI = browser && "ClipboardItem" in window;
+
   async function ico(image: Vips.Image): Promise<Uint8Array> {
     const ico = new IconIco();
     const dimensions = [16, 32, 48, 64, 128, 256];
@@ -138,10 +137,10 @@
     return icns.encode();
   }
 
-  async function getFile(): Promise<File | undefined> {
+  async function getFile(extension?: string): Promise<File | undefined> {
     const format = DownloadFormat.getFormatFromExtension(
       downloadFormats,
-      comboboxValue
+      extension ?? comboboxValue
     );
     if (format === undefined || svg === undefined) return;
     let data: BlobPart | undefined;
@@ -185,6 +184,18 @@
       type: format.mime
     });
     return file;
+  }
+
+  async function copy(): Promise<void> {
+    // Only png currently has wide support for use with the clipboard api.
+    // https://w3c.github.io/clipboard-apis/#writing-to-clipboard
+    const file = await getFile("png");
+    if (file === undefined) return;
+    return navigator.clipboard.write([
+      new ClipboardItem({
+        [file.type]: file
+      })
+    ]);
   }
 
   async function download(): Promise<void> {
@@ -236,41 +247,48 @@
   }
 </script>
 
-<div class="container mx-auto space-x-2 space-y-8">
-  <ProgressRadial
+<div class="container mx-auto space-y-4">
+  {#if canUseClipboardAPI}
+    <button type="button" class="variant-soft btn" on:click="{copy}"
+      >Copy png</button>
+  {/if}
+  <div class="space-x-2">
+    <!-- <ProgressRadial
     {value}
     stroke="{100}"
     meter="stroke-primary-500"
     track="stroke-primary-500/30"
-    strokeLinecap="{'round'}">{value}%</ProgressRadial>
-
-  <div class="inline space-y-0">
-    <button
-      class="variant-soft btn w-48 justify-between"
-      use:popup="{popupCombobox}">
-      <span
-        >{DownloadFormat.getFormatFromExtension(downloadFormats, comboboxValue)
-          ?.displayName}</span>
-      <span>↓</span>
-    </button>
-    <div
-      class="card max-h-64 w-48 overflow-y-scroll shadow-xl"
-      data-popup="popupCombobox">
-      <ListBox rounded="rounded-none">
-        {#each downloadFormats as downloadFormat}
-          <ListBoxItem
-            bind:group="{comboboxValue}"
-            name="medium"
-            value="{downloadFormat.extension}"
-            >{downloadFormat.displayName}</ListBoxItem>
-        {/each}
-      </ListBox>
+    strokeLinecap="{'round'}">{value}%</ProgressRadial> -->
+    <div class="inline space-y-0">
+      <button
+        class="variant-soft btn w-48 justify-between"
+        use:popup="{popupCombobox}">
+        <span
+          >{DownloadFormat.getFormatFromExtension(
+            downloadFormats,
+            comboboxValue
+          )?.displayName}</span>
+        <span>↓</span>
+      </button>
+      <div
+        class="card max-h-64 w-48 overflow-y-scroll shadow-xl"
+        data-popup="popupCombobox">
+        <ListBox rounded="rounded-none">
+          {#each downloadFormats as downloadFormat}
+            <ListBoxItem
+              bind:group="{comboboxValue}"
+              name="medium"
+              value="{downloadFormat.extension}"
+              >{downloadFormat.displayName}</ListBoxItem>
+          {/each}
+        </ListBox>
+      </div>
     </div>
+    <button type="button" class="variant-soft btn" on:click="{download}"
+      >Download</button>
+    {#if canUseFileSystemAPI}
+      <button type="button" class="variant-soft btn" on:click="{saveAs}"
+        >Save As</button>
+    {/if}
   </div>
-  <button type="button" class="variant-soft btn" on:click="{download}"
-    >Download</button>
-  {#if canUseFileSystemAPI}
-    <button type="button" class="variant-soft btn" on:click="{saveAs}"
-      >Save As</button>
-  {/if}
 </div>

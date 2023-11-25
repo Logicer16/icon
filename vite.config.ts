@@ -8,7 +8,7 @@ import {sveltekit} from "@sveltejs/kit/vite";
 import {SvelteKitPWA} from "@vite-pwa/sveltekit";
 import topLevelAwait from "vite-plugin-top-level-await";
 import {viteStaticCopy} from "vite-plugin-static-copy";
-import {webmanifest} from "./src/lib/webmanifest.js";
+import {webmanifest} from "./src/lib/ServiceWorker/webmanifest.js";
 
 const extensions = [
   "js",
