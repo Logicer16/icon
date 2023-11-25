@@ -1,3 +1,4 @@
+import {themeColour} from "./const";
 import type Vips from "wasm-vips";
 
 export type SVGData = Vips.Blob & BlobPart;
@@ -26,9 +27,8 @@ export function processSvg(
 
 function addStyle(rawSvg: SVGData, parameters: SVGProcessParameters): string {
   const styles: string[] = [];
-  if (parameters.fillColour !== undefined) {
-    styles.push(`#Fill * {fill:${parameters.fillColour};}`);
-  }
+  styles.push(`#Fill * {fill:${parameters.fillColour ?? themeColour};}`);
+
   let parsedSvg: string | undefined;
   if (typeof rawSvg !== "string") {
     parsedSvg = textDecoder.decode(rawSvg);
