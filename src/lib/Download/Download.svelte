@@ -247,48 +247,40 @@
   }
 </script>
 
-<div class="container mx-auto space-y-4">
+<div class="container flex flex-wrap gap-x-2 gap-y-4">
   {#if canUseClipboardAPI}
-    <button type="button" class="variant-soft btn" on:click="{copy}"
-      >Copy png</button>
-  {/if}
-  <div class="space-x-2">
-    <!-- <ProgressRadial
-    {value}
-    stroke="{100}"
-    meter="stroke-primary-500"
-    track="stroke-primary-500/30"
-    strokeLinecap="{'round'}">{value}%</ProgressRadial> -->
-    <div class="inline space-y-0">
-      <button
-        class="variant-soft btn w-48 justify-between"
-        use:popup="{popupCombobox}">
-        <span
-          >{DownloadFormat.getFormatFromExtension(
-            downloadFormats,
-            comboboxValue
-          )?.displayName}</span>
-        <span>↓</span>
-      </button>
-      <div
-        class="card max-h-64 w-48 overflow-y-scroll shadow-xl"
-        data-popup="popupCombobox">
-        <ListBox rounded="rounded-none">
-          {#each downloadFormats as downloadFormat}
-            <ListBoxItem
-              bind:group="{comboboxValue}"
-              name="medium"
-              value="{downloadFormat.extension}"
-              >{downloadFormat.displayName}</ListBoxItem>
-          {/each}
-        </ListBox>
-      </div>
+    <div class="basis-full">
+      <button type="button" class="variant-soft btn" on:click="{copy}"
+        >Copy png</button>
     </div>
-    <button type="button" class="variant-soft btn" on:click="{download}"
-      >Download</button>
-    {#if canUseFileSystemAPI}
-      <button type="button" class="variant-soft btn" on:click="{saveAs}"
-        >Save As</button>
-    {/if}
+  {/if}
+  <div class="inline space-y-0">
+    <button
+      class="variant-soft btn w-48 justify-between"
+      use:popup="{popupCombobox}">
+      <span
+        >{DownloadFormat.getFormatFromExtension(downloadFormats, comboboxValue)
+          ?.displayName}</span>
+      <span>↓</span>
+    </button>
+    <div
+      class="card max-h-64 w-48 overflow-y-scroll shadow-xl"
+      data-popup="popupCombobox">
+      <ListBox rounded="rounded-none">
+        {#each downloadFormats as downloadFormat}
+          <ListBoxItem
+            bind:group="{comboboxValue}"
+            name="medium"
+            value="{downloadFormat.extension}"
+            >{downloadFormat.displayName}</ListBoxItem>
+        {/each}
+      </ListBox>
+    </div>
   </div>
+  <button type="button" class="variant-soft btn" on:click="{download}"
+    >Download</button>
+  {#if canUseFileSystemAPI}
+    <button type="button" class="variant-soft btn" on:click="{saveAs}"
+      >Save As</button>
+  {/if}
 </div>
