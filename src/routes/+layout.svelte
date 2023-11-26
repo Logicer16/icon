@@ -27,6 +27,7 @@
   const scriptType = process.env.NODE_ENV !== "production" ? "module" : "";
 
   $: webManifest = pwaInfo ? pwaInfo.webManifest.linkTag : "";
+  $: idAllowed = !idIsExcluded($page.route.id);
 </script>
 
 <svelte:head>
@@ -34,12 +35,16 @@
   <title>{title}</title>
   <meta name="description" content="{description}" />
   <meta name="theme-color" content="{themeColour}" />
+  {#if idAllowed}
+    <!-- Skeleton defaults to dark theme. -->
+    <meta name="color-scheme" content="dark light" />
+  {/if}
   <script
     src="{serviceWorkerPath}"
     defer
     async
     type="{scriptType}"
-    data-should-auto-reload="{!idIsExcluded($page.route.id)}"></script>
+    data-should-auto-reload="{idAllowed}"></script>
   {@html `<` +
     `script>${autoModeWatcher.toString()} autoModeWatcher();</script>`}
 </svelte:head>
