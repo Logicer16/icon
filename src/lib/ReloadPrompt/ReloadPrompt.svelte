@@ -1,9 +1,5 @@
 <script lang="ts">
-  import {
-    getToastStore,
-    Toast,
-    type ToastSettings
-  } from "@skeletonlabs/skeleton";
+  import {getToastStore, type ToastSettings} from "@skeletonlabs/skeleton";
   import {
     registerReloadHandler,
     reloadServiceWorker
@@ -40,8 +36,3 @@
     }
   );
 </script>
-
-<Toast
-  position="br"
-  buttonDismiss="btn-icon btn-icon-sm variant-filled"
-  buttonAction="btn btn-sm variant-filled" />

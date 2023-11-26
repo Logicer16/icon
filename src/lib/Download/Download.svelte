@@ -3,13 +3,15 @@
     DownloadFormat,
     type DownloadFormatOptions
   } from "$lib/Download/DownloadFormat";
-  import {IconIcns, IconIco} from "@shockpkg/icon-encoder";
   import {
+    getToastStore,
     ListBox,
     ListBoxItem,
     popup,
-    type PopupSettings
+    type PopupSettings,
+    type ToastSettings
   } from "@skeletonlabs/skeleton";
+  import {IconIcns, IconIco} from "@shockpkg/icon-encoder";
   import {browser} from "$app/environment";
   import FileSaver from "file-saver";
   import type {SVGData} from "$lib/svgManipulator/svgManipulator";
@@ -81,6 +83,12 @@
     })();
 
   const canUseClipboardAPI = browser && "ClipboardItem" in window;
+
+  const toastStore = getToastStore();
+  const copySuccessToast: ToastSettings = {
+    background: "variant-filled-success",
+    message: "Copied!"
+  };
 
   async function ico(image: Vips.Image): Promise<Uint8Array> {
     const ico = new IconIco();
@@ -191,11 +199,15 @@
     // https://w3c.github.io/clipboard-apis/#writing-to-clipboard
     const file = await getFile("png");
     if (file === undefined) return;
-    return navigator.clipboard.write([
-      new ClipboardItem({
-        [file.type]: file
-      })
-    ]);
+    return navigator.clipboard
+      .write([
+        new ClipboardItem({
+          [file.type]: file
+        })
+      ])
+      .then(() => {
+        toastStore.trigger(copySuccessToast);
+      });
   }
 
   async function download(): Promise<void> {

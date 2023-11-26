@@ -8,7 +8,11 @@
     offset,
     shift
   } from "@floating-ui/dom";
-  import {autoModeWatcher, initializeStores} from "@skeletonlabs/skeleton";
+  import {
+    autoModeWatcher,
+    initializeStores,
+    Toast
+  } from "@skeletonlabs/skeleton";
   import {description, serviceWorkerName, themeColour, title} from "$lib/const";
   import {idIsExcluded} from "$lib/ServiceWorker/excluded";
   import {page} from "$app/stores";
@@ -43,6 +47,11 @@
 <main>
   <slot />
 </main>
+
+<Toast
+  position="br"
+  buttonDismiss="btn-icon btn-icon-sm variant-filled"
+  buttonAction="btn btn-sm variant-filled" />
 
 {#await import("$lib/ReloadPrompt/ReloadPrompt.svelte") then { default: ReloadPrompt }}
   <ReloadPrompt></ReloadPrompt>
