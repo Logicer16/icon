@@ -10,6 +10,8 @@
   } from "@floating-ui/dom";
   import {autoModeWatcher, initializeStores} from "@skeletonlabs/skeleton";
   import {description, serviceWorkerName, themeColour, title} from "$lib/const";
+  import {idIsExcluded} from "$lib/ServiceWorker/excluded";
+  import {page} from "$app/stores";
   import {pwaInfo} from "virtual:pwa-info";
   import {storePopup} from "@skeletonlabs/skeleton";
 
@@ -28,7 +30,12 @@
   <title>{title}</title>
   <meta name="description" content="{description}" />
   <meta name="theme-color" content="{themeColour}" />
-  <script src="{serviceWorkerPath}" defer async type="{scriptType}"></script>
+  <script
+    src="{serviceWorkerPath}"
+    defer
+    async
+    type="{scriptType}"
+    data-should-auto-reload="{!idIsExcluded($page.route.id)}"></script>
   {@html `<` +
     `script>${autoModeWatcher.toString()} autoModeWatcher();</script>`}
 </svelte:head>

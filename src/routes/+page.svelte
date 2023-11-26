@@ -1,32 +1,17 @@
 <script lang="ts">
   import {derived, writable, type Writable} from "svelte/store";
-  import {processSvg, type SVGData} from "$lib/svgManipulator";
+  import {processSvg, type SVGData} from "$lib/svgManipulator/svgManipulator";
   import {themeColour, title} from "$lib/const";
   import {contrastCSSColor} from "$lib/contrast";
   import Download from "$lib/Download/Download.svelte";
-  import {onMount} from "svelte";
   import SvgPreview from "$lib/SVGPreview/SVGPreview.svelte";
 
   let fillColour: Writable<string> | undefined = writable(themeColour);
 
-  let rawSvg = writable<string>();
-  onMount(() => {
-    fetch("/favicon/favicon.svg")
-      .then(async (response) => {
-        return response.text();
-      })
-      .then((contents) => {
-        rawSvg.set(contents);
-      })
-      .catch((error) => {
-        throw error;
-      });
-  });
-
   let svg = derived(
-    [rawSvg, fillColour],
-    ([$rawSvg, $fillColour], set: (value: SVGData) => void) => {
-      set(processSvg($rawSvg, {fillColour: $fillColour}));
+    [fillColour],
+    ([$fillColour], set: (value: SVGData) => void) => {
+      set(processSvg({fillColour: $fillColour}));
     }
   );
 

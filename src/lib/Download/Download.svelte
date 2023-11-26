@@ -12,7 +12,7 @@
   } from "@skeletonlabs/skeleton";
   import {browser} from "$app/environment";
   import FileSaver from "file-saver";
-  import type {SVGData} from "$lib/svgManipulator";
+  import type {SVGData} from "$lib/svgManipulator/svgManipulator";
   import {vips} from "$lib/vips/vips";
   import type Vips from "wasm-vips";
 

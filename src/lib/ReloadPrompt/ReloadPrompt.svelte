@@ -8,6 +8,8 @@
     registerReloadHandler,
     reloadServiceWorker
   } from "$lib/ServiceWorker/client";
+  import {idIsExcluded} from "$lib/ServiceWorker/excluded";
+  import {page} from "$app/stores";
 
   const toastStore = getToastStore();
   const toastSettings: ToastSettings = {
@@ -33,7 +35,7 @@
     },
     () => {
       if (alreadyTriggered) return;
-      toastStore.trigger(toastSettings);
+      if (!idIsExcluded($page.route.id)) toastStore.trigger(toastSettings);
       alreadyTriggered = true;
     }
   );

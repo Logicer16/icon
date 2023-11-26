@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type {SVGData} from "$lib/svgManipulator";
+  import type {SVGData} from "$lib/svgManipulator/svgManipulator";
 
   export let svg: SVGData | undefined;
 </script>

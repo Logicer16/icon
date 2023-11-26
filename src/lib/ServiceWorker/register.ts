@@ -6,6 +6,16 @@ let loaded = false;
 let updateIntervalID: number | NodeJS.Timeout | undefined;
 let updateCheckIntervalID: number | NodeJS.Timeout | undefined;
 
+let shouldAutoReload: true | undefined;
+
+export function initShouldAutoReload(): void {
+  if (
+    document.currentScript?.getAttribute("data-should-auto-reload") === "true"
+  ) {
+    shouldAutoReload = true;
+  }
+}
+
 function coepCredentialless(): boolean {
   // Support is not yet universal.
   return false;
@@ -31,8 +41,8 @@ function reload(): void {
 
 function processServiceWorkerState(serviceWorker: ServiceWorker): void {
   if (serviceWorker.state === "activated") {
-    // If the registration is active, but it's not controlling the page
-    if (!navigator.serviceWorker.controller) {
+    // If a registration is active, but it's not controlling the page
+    if (navigator.serviceWorker.controller === null && shouldAutoReload) {
       reload();
     }
   }
