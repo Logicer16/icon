@@ -2,6 +2,7 @@ module.exports = {
   root: true,
   extends: [
     "plugin:@logicer/recommended-typescript",
+    "plugin:@logicer/deprecation",
     "plugin:svelte/prettier",
     "plugin:@logicer/recommended-prettier"
   ],
