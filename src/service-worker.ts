@@ -14,7 +14,6 @@ import {
   ServiceWorkerClientMessageTypes,
   ServiceWorkerMessageTypes
 } from "./lib/ServiceWorker/messages.js";
-
 import {version} from "$service-worker";
 
 declare let self: ServiceWorkerGlobalScope;

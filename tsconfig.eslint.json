@@ -8,6 +8,10 @@
   "include": [
     "src/service-worker.ts",
     "postcss.config.mjs",
-    "tailwind.config.ts"
+    "tailwind.config.ts",
+    ".prettierrc.js",
+    "svelte.config.js",
+    "vite.config.ts",
+    ".eslintrc.cjs"
   ]
 }

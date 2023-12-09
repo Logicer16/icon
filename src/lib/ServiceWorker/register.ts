@@ -1,8 +1,8 @@
 /**
  * @file Register the service worker.
  */
-import {fetchUpdatedServiceWorker} from "./common";
-import {ServiceWorkerMessageTypes} from "./messages";
+import {fetchUpdatedServiceWorker} from "./common.js";
+import {ServiceWorkerMessageTypes} from "./messages.js";
 import {serviceWorkerName} from "$lib/const";
 
 let loaded = false;

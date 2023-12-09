@@ -2,8 +2,8 @@ module.exports = {
   root: true,
   extends: [
     "plugin:@logicer/recommended-typescript",
-    "plugin:@logicer/deprecation",
     "plugin:@logicer/recommended-jsdoc",
+    "plugin:@logicer/deprecation",
     "plugin:svelte/prettier",
     "plugin:@logicer/recommended-prettier"
   ],
@@ -29,6 +29,13 @@ module.exports = {
       },
       rules: {
         "jsdoc/require-file-overview": "off"
+      }
+    },
+    {
+      files: ["src/**/*"],
+      rules: {
+        "n/no-missing-import": "off",
+        "n/prefer-global/process": ["error", "always"]
       }
     }
   ]

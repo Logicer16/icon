@@ -4,7 +4,7 @@
 import {derived, readable, type Readable} from "svelte/store";
 import Color from "colorjs.io";
 import type {ColorTypes} from "colorjs.io/types/src/color";
-import {prefersColorScheme} from "./prefersColourScheme";
+import {prefersColorScheme} from "./prefersColourScheme.js";
 
 /**
  * Determine the contrast of two colours.

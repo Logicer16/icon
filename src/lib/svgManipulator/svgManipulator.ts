@@ -1,6 +1,7 @@
 /**
  * @file Manipulates the svg icon's css.
  */
+// eslint-disable-next-line n/file-extension-in-import
 import rawSVG from "./favicon.svg?raw";
 import {themeColour} from "../const";
 import type Vips from "wasm-vips";

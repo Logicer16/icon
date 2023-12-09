@@ -4,8 +4,8 @@
 import {
   ServiceWorkerClientMessageTypes,
   ServiceWorkerMessageTypes
-} from "./messages";
-import {fetchUpdatedServiceWorker} from "./common";
+} from "./messages.js";
+import {fetchUpdatedServiceWorker} from "./common.js";
 
 /**
  * Reload the service worker.

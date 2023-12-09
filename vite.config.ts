@@ -5,6 +5,7 @@ import {defineConfig, normalizePath} from "vite";
 import {dirname} from "path";
 import {fileURLToPath} from "node:url";
 import {nodePolyfills} from "vite-plugin-node-polyfills";
+import process from "process";
 import {purgeCss} from "vite-plugin-tailwind-purgecss";
 import {serviceWorkerName} from "./src/lib/const.js";
 import {sveltekit} from "@sveltejs/kit/vite";

@@ -1,3 +1,6 @@
+/**
+ * @file The postCSS configuration.
+ */
 import autoPrefixer from "autoprefixer";
 import tailWindCSS from "tailwindcss";
 import tailWindCSSNesting from "tailwindcss/nesting/index.js";
