@@ -1,6 +1,14 @@
+/**
+ * @file Manage the vips instance.
+ */
+
 import {assets} from "$app/paths";
 import type VipsType from "wasm-vips";
 
+/**
+ * Inject the script to load vips into the webpage if it is cross origin isolated.
+ * @param scriptSrc The path of the script.
+ */
 async function injectScript(scriptSrc: string): Promise<void> {
   return new Promise<void>((resolve, reject) => {
     const script = document.createElement("script");

@@ -1,3 +1,7 @@
+/**
+ * @file A class for defining a file format.
+ */
+
 export interface DownloadFormatOptions {
   additionalExtensions?: string[];
   displayName?: string;

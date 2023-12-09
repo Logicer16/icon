@@ -1,6 +1,6 @@
 <script lang="ts">
   import {writable, type Writable} from "svelte/store";
-  import {contrastCSSColor} from "$lib/contrast";
+  import {contrastBWColorCSS} from "$lib/contrast";
   import {themeColour} from "$lib/const";
 
   export let colour: Writable<string> = writable(themeColour);
@@ -8,7 +8,7 @@
   export let displayName: string = id;
   // $: displayName = id;
 
-  let textColor = contrastCSSColor(colour);
+  let textColor = contrastBWColorCSS(colour);
 </script>
 
 {#if $colour !== ""}

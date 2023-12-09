@@ -1,3 +1,6 @@
+/**
+ * @file The vite configuration.
+ */
 import {defineConfig, normalizePath} from "vite";
 import {dirname} from "path";
 import {fileURLToPath} from "node:url";

@@ -1,3 +1,7 @@
+/**
+ * @file The PWA Web Manifest.
+ */
+
 /* eslint-disable @typescript-eslint/naming-convention */
 import {
   description,

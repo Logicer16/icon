@@ -1,3 +1,7 @@
+/**
+ * @file Constants related to the site.
+ */
+
 type HexColour = `#${string}`;
 export const themeColour: HexColour = "#558B2F";
 export const startupBackgroundColour: HexColour = themeColour;

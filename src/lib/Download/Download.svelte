@@ -90,15 +90,21 @@
     message: "Copied!"
   };
 
+  /**
+   * Generate an .ico file from an image.
+   * @param image The image to convert.
+   * @returns Encoded ico file data.
+   */
   async function ico(image: Vips.Image): Promise<Uint8Array> {
     const ico = new IconIco();
     const dimensions = [16, 32, 48, 64, 128, 256];
     await Promise.all(
       dimensions.map(async (dimension) => {
-        if (vips === undefined)
+        if (vips === undefined) {
           throw new Error(
             "You have somehow called a function requiring a vips image without a vips instance. Well done."
           );
+        }
         const png = image
           .resize(dimension / image.width, {kernel: vips.Kernel.nearest})
           .writeToBuffer(".png");
@@ -114,6 +120,11 @@
     OSTypes: string[];
   }
 
+  /**
+   * Generate an .icns file from an image.
+   * @param image The image to convert.
+   * @returns Encoded icns file data.
+   */
   async function icns(image: Vips.Image): Promise<Uint8Array> {
     const icns = new IconIcns();
     /* eslint-disable @typescript-eslint/naming-convention */
@@ -130,10 +141,11 @@
     dimensions;
     await Promise.all(
       dimensions.map(async (dimension) => {
-        if (vips === undefined)
+        if (vips === undefined) {
           throw new Error(
             "You have somehow called a function requiring a vips image without a vips instance. Well done."
           );
+        }
         const png = image
           .resize(dimension.dimension / image.width, {
             kernel: vips.Kernel.nearest
@@ -145,6 +157,11 @@
     return icns.encode();
   }
 
+  /**
+   * Generate a file for an extension.
+   * @param extension The file extension corresponding to the generated file. Defaults to the value of the combo box.
+   * @returns The file if a file if a file can be generated from the extension, otherwise undefined. Undefined will be returned if vips is unavailable.
+   */
   async function getFile(extension?: string): Promise<File | undefined> {
     const format = DownloadFormat.getFormatFromExtension(
       downloadFormats,
@@ -194,6 +211,10 @@
     return file;
   }
 
+  /**
+   * Copy a png of the image to the clipboard.
+   * @returns A promise which resolves when the copy operation has completed.
+   */
   async function copy(): Promise<void> {
     // Only png currently has wide support for use with the clipboard api.
     // https://w3c.github.io/clipboard-apis/#writing-to-clipboard
@@ -210,12 +231,18 @@
       });
   }
 
+  /**
+   * Download the image.
+   */
   async function download(): Promise<void> {
     const file = await getFile();
     if (file === undefined) return;
     FileSaver(file);
   }
 
+  /**
+   * Open a save as dialogue for the file.
+   */
   async function saveAs(): Promise<void> {
     if (!canUseFileSystemAPI) return;
     const file = await getFile();
@@ -243,7 +270,6 @@
       const writable = await handle.createWritable();
       await writable.write(file);
       await writable.close();
-      return;
     } catch (error) {
       // Fail silently if the user has simply canceled the dialog.
       if (

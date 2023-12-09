@@ -3,6 +3,7 @@ module.exports = {
   extends: [
     "plugin:@logicer/recommended-typescript",
     "plugin:@logicer/deprecation",
+    "plugin:@logicer/recommended-jsdoc",
     "plugin:svelte/prettier",
     "plugin:@logicer/recommended-prettier"
   ],
@@ -25,6 +26,9 @@ module.exports = {
       parser: "svelte-eslint-parser",
       parserOptions: {
         parser: "@typescript-eslint/parser"
+      },
+      rules: {
+        "jsdoc/require-file-overview": "off"
       }
     }
   ]

@@ -1,34 +1,27 @@
+/**
+ * @file Determine the contrast of a colour.
+ */
 import {derived, readable, type Readable} from "svelte/store";
-import {browser} from "$app/environment";
 import Color from "colorjs.io";
 import type {ColorTypes} from "colorjs.io/types/src/color";
+import {prefersColorScheme} from "./prefersColourScheme";
 
-function initPrefersColorSchemeStore(): Readable<"dark" | "light"> {
-  // Skeleton defaults to dark theme.
-  if (!browser) return readable("dark");
-
-  const prefersColorSchemeMatch = window.matchMedia(
-    "(prefers-color-scheme: dark)"
-  );
-  return readable(colourSchemeMatches(prefersColorSchemeMatch), (set) => {
-    prefersColorSchemeMatch.addEventListener("change", (event) => {
-      set(event.matches ? "dark" : "light");
-    });
-    set(colourSchemeMatches(prefersColorSchemeMatch));
-  });
-}
-
-const prefersColorScheme = initPrefersColorSchemeStore();
-
-function colourSchemeMatches(match: MediaQueryList): "dark" | "light" {
-  return match.matches ? "dark" : "light";
-}
-
+/**
+ * Determine the contrast of two colours.
+ * @param colour The first colour to compare.
+ * @param comparison The second colour to compare.
+ * @returns A value which is greater the more contrasting a colour is.
+ */
 function contrast(colour: Color, comparison: ColorTypes): number {
   return Math.abs(colour.contrastAPCA(comparison));
 }
 
-export function contrastCSSColor(
+/**
+ * Get the either black or white as css colours depending on which contrasts more.
+ * @param color The colour to compare against.
+ * @returns Either black or white as css colours depending on which contrasts more.
+ */
+export function contrastBWColorCSS(
   color: string | Readable<string>
 ): Readable<string> {
   let processedColor: Readable<Color>;

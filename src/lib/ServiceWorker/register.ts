@@ -1,4 +1,7 @@
-import {fetchWaitingServiceWorker} from "./common";
+/**
+ * @file Register the service worker.
+ */
+import {fetchUpdatedServiceWorker} from "./common";
 import {ServiceWorkerMessageTypes} from "./messages";
 import {serviceWorkerName} from "$lib/const";
 
@@ -8,6 +11,12 @@ let updateCheckIntervalID: number | NodeJS.Timeout | undefined;
 
 let shouldAutoReload: true | undefined;
 
+// Support is not yet universal and no features of the site rely on unsecured external resources.
+const coepCredentialless = false;
+
+/**
+ * Initialise the `shouldAutoReload` based on the attributes of the html tag responsible for loading this script.
+ */
 export function initShouldAutoReload(): void {
   if (
     document.currentScript?.getAttribute("data-should-auto-reload") === "true"
@@ -16,29 +25,40 @@ export function initShouldAutoReload(): void {
   }
 }
 
-function coepCredentialless(): boolean {
-  // Support is not yet universal.
-  return false;
+/**
+ * Throws an error which cannot be recovered from.
+ * @param errorMessage A string describing the error.
+ * @throws The error created from the string.
+ */
+function fatalError(errorMessage: string): void {
+  alert(errorMessage);
+  throw new Error(errorMessage);
 }
 
-function fatalError(error: string): void {
-  console.error(error);
-  alert(error);
-}
-
-function fetchNewServiceWorker(
+/**
+ * Get the latest revision of the service worker being processed.
+ * @param registration The registration associated with the service workers.
+ * @returns The latest revision of the service worker being processed.
+ */
+function fetchNewestServiceWorker(
   registration: ServiceWorkerRegistration
 ): ServiceWorker | undefined {
-  let serviceWorker: ServiceWorker | null =
-    fetchWaitingServiceWorker(registration) ?? null;
-  serviceWorker = registration.active ?? serviceWorker;
+  const serviceWorker: ServiceWorker | null =
+    fetchUpdatedServiceWorker(registration) ?? registration.active;
   return serviceWorker ?? undefined;
 }
 
+/**
+ * Reload the window.
+ */
 function reload(): void {
   window.location.reload();
 }
 
+/**
+ * Respond to the state of the service worker.
+ * @param serviceWorker The service worker whose state is to be responded to.
+ */
 function processServiceWorkerState(serviceWorker: ServiceWorker): void {
   if (serviceWorker.state === "activated") {
     // If a registration is active, but it's not controlling the page
@@ -48,26 +68,41 @@ function processServiceWorkerState(serviceWorker: ServiceWorker): void {
   }
 }
 
+/**
+ * Prompt all clients of the service worker that an update is available.
+ */
 function promptServiceWorkerUpdate(): void {
   navigator.serviceWorker.controller?.postMessage({
     type: ServiceWorkerMessageTypes.canReloadServiceWorker
   });
 }
 
+/**
+ * Check for updates to the service worker.
+ * @param registration The registration associated with the service workers.
+ */
 function checkForUpdate(registration: ServiceWorkerRegistration): void {
-  const waitingServiceWorker = fetchWaitingServiceWorker(registration);
-  if (waitingServiceWorker?.state === "installed") {
+  const updatedServiceWorker = fetchUpdatedServiceWorker(registration);
+  if (updatedServiceWorker?.state === "installed") {
     promptServiceWorkerUpdate();
   }
 }
 
-function prepareUpdate(registration: ServiceWorkerRegistration): void {
-  const waitingServiceWorker = fetchWaitingServiceWorker(registration);
-  waitingServiceWorker?.addEventListener("statechange", () => {
+/**
+ * Respond to service worker updates when they become available.
+ * @param registration The registration associated with the service workers.
+ */
+function listenForUpdate(registration: ServiceWorkerRegistration): void {
+  const updatedServiceWorker = fetchUpdatedServiceWorker(registration);
+  updatedServiceWorker?.addEventListener("statechange", () => {
     checkForUpdate(registration);
   });
+  if (updatedServiceWorker?.state === "installed") checkForUpdate(registration);
 }
 
+/**
+ * Run on the load of the page.
+ */
 function onLoad(): void {
   if (loaded) return;
   navigator.serviceWorker
@@ -75,19 +110,19 @@ function onLoad(): void {
       type: process.env.NODE_ENV !== "production" ? "module" : "classic"
     })
     .then((registration) => {
-      const serviceWorker = fetchNewServiceWorker(registration);
+      const serviceWorker = fetchNewestServiceWorker(registration);
       if (serviceWorker === undefined) {
         throw new Error("Could not find registered service worker");
       }
 
       registration.addEventListener("updatefound", () => {
-        prepareUpdate(registration);
+        listenForUpdate(registration);
       });
       if (
         registration.active !== null &&
         (registration.installing ?? registration.waiting) !== null
       ) {
-        prepareUpdate(registration);
+        listenForUpdate(registration);
       }
 
       clearInterval(updateIntervalID);
@@ -118,6 +153,9 @@ function onLoad(): void {
   loaded = true;
 }
 
+/**
+ * Register the service worker.
+ */
 export function registerServiceWorker(): void {
   if (!("serviceWorker" in navigator)) {
     fatalError(
@@ -135,7 +173,7 @@ export function registerServiceWorker(): void {
   if (navigator.serviceWorker.controller !== null) {
     navigator.serviceWorker.controller.postMessage({
       type: ServiceWorkerMessageTypes.coepCredentialless,
-      value: coepCredentialless()
+      value: coepCredentialless
     });
   }
 }

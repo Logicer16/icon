@@ -1,7 +1,7 @@
 <script lang="ts">
   import {getToastStore, type ToastSettings} from "@skeletonlabs/skeleton";
   import {
-    registerReloadHandler,
+    registerUpdateHandlers,
     reloadServiceWorker
   } from "$lib/ServiceWorker/client";
   import {idIsExcluded} from "$lib/ServiceWorker/excluded";
@@ -19,20 +19,23 @@
 
   let alreadyTriggered = false;
 
+  /**
+   * Reload the service worker.
+   */
   function reload(): void {
     reloadServiceWorker().catch((error) => {
       throw error;
     });
   }
 
-  registerReloadHandler(
-    () => {
+  registerUpdateHandlers({
+    reload: () => {
       window.location.reload();
     },
-    () => {
+    updateReady: () => {
       if (alreadyTriggered) return;
       if (!idIsExcluded($page.route.id)) toastStore.trigger(toastSettings);
       alreadyTriggered = true;
     }
-  );
+  });
 </script>

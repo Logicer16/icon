@@ -1,3 +1,6 @@
+/**
+ * @file The tailwind configuration.
+ */
 import {Config} from "tailwindcss";
 import forms from "@tailwindcss/forms";
 import {join} from "path";

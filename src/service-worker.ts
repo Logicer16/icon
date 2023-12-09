@@ -1,5 +1,7 @@
+/**
+ * @file The site's service worker.
+ */
 /// <reference types="@sveltejs/kit" />
-///// <reference no-default-lib="true"/>
 /// <reference lib="esnext" />
 /// <reference lib="webworker" />
 
@@ -13,25 +15,28 @@ import {
   ServiceWorkerMessageTypes
 } from "./lib/ServiceWorker/messages.js";
 
-// import {version} from "$service-worker";
+import {version} from "$service-worker";
 
 declare let self: ServiceWorkerGlobalScope;
 
-function serviceWorker(): void {
-  // Register service worker if script is running in the browser
-  if (typeof window !== "undefined") {
-    if (typeof document !== "undefined") initShouldAutoReload();
-    registerServiceWorker();
-    return;
-  }
+// Register service worker if script is running in the browser
+if (typeof window !== "undefined") {
+  if (typeof document !== "undefined") initShouldAutoReload();
+  registerServiceWorker();
+} else {
+  initServiceWorker();
+}
 
+/**
+ * Adds service worker listeners.
+ */
+function initServiceWorker(): void {
   const cacheId = "SW Cache";
   // const externalCacheId = "SW External Cache";
 
   let coepCredentialless = false;
 
   type Files = Record<string, string | undefined>;
-  type Value<T> = T[keyof T];
 
   // Is an empty array whilst running the dev server due to the sev server using SSR.
   const fileManifest = self.__WB_MANIFEST;
@@ -50,20 +55,40 @@ function serviceWorker(): void {
     })
   );
 
-  const cacheExclude = ["/service-worker.js"];
+  /**
+   * Files excluded from bundling by workbox.
+   */
+  const cacheExcluded = ["/service-worker.js"];
 
-  function formatPath(path: keyof Files, revision: Value<Files>): string {
+  /**
+   * Format a local path to include it's revision.
+   * @param path The path of the file.
+   * @returns The formatted path.
+   */
+  function formatPath(path: keyof Files): string {
     // As long as there are no other query parameters (which there shouldn't be for cacheable resources) this should keep working
-    if (revision === undefined) return path;
-    return `${path}?__WB_REVISION__=${revision}`;
+    // Default to use the build version if a file version is unavailable.
+    return `${path}?__WB_REVISION__=${files[path] ?? version}`;
   }
 
+  /**
+   * Add a HTTP response header to a response.
+   * @param headers The set of headers to add the header to.
+   * @param name The name of the header to add.
+   * @param value The value of the new header.
+   * @returns The updated set of headers.
+   */
   function addHeader(headers: Headers, name: string, value: string): Headers {
     const newHeaders = new Headers(headers);
     if (!newHeaders.has(name)) newHeaders.set(name, value);
     return newHeaders;
   }
 
+  /**
+   * Adds a HTTP response headers to a response.
+   * @param originalResponse The response to add the headers to.
+   * @returns The modified response.
+   */
   function addHeaders(originalResponse: Response): Response {
     let newHeaders = addHeader(
       originalResponse.headers,
@@ -90,20 +115,29 @@ function serviceWorker(): void {
     });
   }
 
+  /**
+   * Extract the path component of a URL.
+   * @param url The url to extract the path from.
+   * @returns The url's path component.
+   */
   function extractPath(url: URL): string {
     return url.href.substring(url.href.indexOf(url.host) + url.host.length);
   }
 
   self.addEventListener("install", (event) => {
     // Create a new cache and add all files to it
+    /**
+     * The the site's files to the cache to allow offline use.
+     * @returns A promise which fulfils when all of the files have been added to the cache.
+     */
     // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
     async function addFilesToCache(): Promise<void[]> {
       const cache = await caches.open(cacheId);
       const cachedPaths = (await cache.keys()).map((request) => {
         return extractPath(new URL(request.url));
       });
-      const filePaths = Object.entries(files).map((entry) => {
-        return formatPath(...entry);
+      const filePaths = Object.keys(files).map((entry) => {
+        return formatPath(entry);
       });
       return Promise.all(
         filePaths.map(async (path) => {
@@ -116,19 +150,23 @@ function serviceWorker(): void {
   });
 
   self.addEventListener("activate", (event) => {
-    // Purge caches
-    async function pruneOldCaches(): Promise<void> {
-      // App
+    /**
+     * Removes files from the cache which are no longer needed.
+     * @returns A promise which resolves with the status of each of the `cache.delete()` calls.
+     */
+    async function pruneCache(): Promise<boolean[]> {
+      const promises: Promise<boolean>[] = [];
+
       const cache = await caches.open(cacheId);
       for (const key of await cache.keys()) {
         const url = new URL(key.url);
         const path = extractPath(url);
-        if (path !== formatPath(url.pathname, files[url.pathname]))
-          await cache.delete(key);
+        if (path !== formatPath(url.pathname)) promises.push(cache.delete(key));
       }
+      return Promise.all(promises);
     }
 
-    event.waitUntil(pruneOldCaches());
+    event.waitUntil(pruneCache());
   });
 
   self.addEventListener("message", (event) => {
@@ -182,7 +220,11 @@ function serviceWorker(): void {
   });
 
   self.addEventListener("fetch", (event) => {
-    async function respond(): Promise<Response> {
+    /**
+     * Responds to a fetch request. Adds the cross origin isolation headers and falls back to the local cache if the server is unavailable.
+     * @returns The processed fetch response.
+     */
+    async function respondToFetch(): Promise<Response> {
       const request =
         coepCredentialless && event.request.mode === "no-cors"
           ? new Request(event.request, {
@@ -196,7 +238,7 @@ function serviceWorker(): void {
       const cache = await caches.open(cacheId);
       const path = url.pathname;
       if (Object.keys(files).includes(path)) {
-        const cacheMatch = await cache.match(formatPath(path, files[path]));
+        const cacheMatch = await cache.match(formatPath(path));
         if (cacheMatch !== undefined) {
           return addHeaders(cacheMatch);
         }
@@ -204,11 +246,12 @@ function serviceWorker(): void {
 
       if (
         process.env.NODE_ENV === "production" &&
-        !cacheExclude.includes(url.pathname)
-      )
+        !cacheExcluded.includes(url.pathname)
+      ) {
         console.warn(
           `Requested to fetch external resource at: ${url.href}\nThis resource will not be cached for offline use.`
         );
+      }
       // Try an online request first, then fall back to the cache if we're offline
       // const externalCache = await caches.open(externalCacheId);
       // const cacheURL = formatPath(url.href, version);
@@ -229,8 +272,6 @@ function serviceWorker(): void {
       // }
     }
 
-    event.respondWith(respond());
+    event.respondWith(respondToFetch());
   });
 }
-
-serviceWorker();

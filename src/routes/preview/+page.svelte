@@ -9,6 +9,11 @@
   import {browser} from "$app/environment";
   import SvgPreview from "$lib/SVGPreview/SVGPreview.svelte";
 
+  /**
+   * Parse the url hash into parameters for the svg.
+   * @param hash The contents of the url hash.
+   * @returns The parameters for the svg.
+   */
   function parseHash(hash: string): SVGProcessParameters {
     if (!hash.startsWith("#")) return {};
     const parameters: unknown = JSON.parse(decodeURIComponent(hash.slice(1)));
@@ -16,7 +21,11 @@
     return parameters;
   }
 
-  function initSVGParameters(): Readable<SVGProcessParameters> {
+  /**
+   * Gets a store containing svg parameters which change according to the url hash.
+   * @returns A svelte store containing the parameters.
+   */
+  function getSVGParameterStore(): Readable<SVGProcessParameters> {
     if (!browser) return readable({});
     return readable(parseHash(window.location.hash), (set) => {
       window.addEventListener("hashchange", () => {
@@ -27,7 +36,7 @@
   }
 
   // eslint-disable-next-line @typescript-eslint/naming-convention
-  const SVGParameters = initSVGParameters();
+  const SVGParameters = getSVGParameterStore();
 
   let svg = derived(
     [SVGParameters],
