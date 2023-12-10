@@ -10,7 +10,7 @@ const config: Config = {
   content: [
     "./src/**/*.{html,js,svelte,ts}",
     join(
-      import.meta.resolve("@skeletonlabs/skeleton"),
+      require.resolve("@skeletonlabs/skeleton"),
       "../**/*.{html,js,svelte,ts}"
     )
   ],
