@@ -2,10 +2,10 @@
  * @file The vite configuration.
  */
 import {defineConfig, normalizePath} from "vite";
-import {dirname} from "path";
+import {dirname} from "node:path";
 import {fileURLToPath} from "node:url";
 import {nodePolyfills} from "vite-plugin-node-polyfills";
-import process from "process";
+import process from "node:process";
 import {purgeCss} from "vite-plugin-tailwind-purgecss";
 import {serviceWorkerName} from "./src/lib/const.js";
 import {sveltekit} from "@sveltejs/kit/vite";
@@ -49,7 +49,7 @@ export default defineConfig({
         globPatterns: [`client/**/*.{${extensions}}`],
         maximumFileSizeToCacheInBytes: 8 * Math.pow(1000, 2)
       },
-      injectRegister: null,
+      injectRegister: undefined,
       manifest: webmanifest,
       minify: true,
       srcDir: "src",

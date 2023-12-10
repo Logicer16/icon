@@ -60,11 +60,13 @@ function reload(): void {
  * @param serviceWorker The service worker whose state is to be responded to.
  */
 function processServiceWorkerState(serviceWorker: ServiceWorker): void {
-  if (serviceWorker.state === "activated") {
+  if (
+    serviceWorker.state === "activated" &&
     // If a registration is active, but it's not controlling the page
-    if (navigator.serviceWorker.controller === null && shouldAutoReload) {
-      reload();
-    }
+    navigator.serviceWorker.controller === null &&
+    shouldAutoReload
+  ) {
+    reload();
   }
 }
 
@@ -107,7 +109,7 @@ function onLoad(): void {
   if (loaded) return;
   navigator.serviceWorker
     .register(`./${serviceWorkerName}.js`, {
-      type: process.env.NODE_ENV !== "production" ? "module" : "classic"
+      type: process.env.NODE_ENV === "production" ? "classic" : "module"
     })
     .then((registration) => {
       const serviceWorker = fetchNewestServiceWorker(registration);
@@ -164,9 +166,8 @@ export function registerServiceWorker(): void {
     return;
   }
 
-  if (document.readyState !== "complete") {
-    addEventListener("load", onLoad);
-  } else {
+  addEventListener("load", onLoad);
+  if (document.readyState === "complete") {
     onLoad();
   }
 

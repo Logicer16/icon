@@ -24,7 +24,7 @@
   initializeStores();
 
   const serviceWorkerPath = `/${serviceWorkerName}.js`;
-  const scriptType = process.env.NODE_ENV !== "production" ? "module" : "";
+  const scriptType = process.env.NODE_ENV === "development" ? "module" : "";
 
   $: webManifest = pwaInfo ? pwaInfo.webManifest.linkTag : "";
   $: idAllowed = !idIsExcluded($page.route.id);

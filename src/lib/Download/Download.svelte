@@ -108,7 +108,7 @@
         const png = image
           .resize(dimension / image.width, {kernel: vips.Kernel.nearest})
           .writeToBuffer(".png");
-        return ico.addFromPng(png, null, false);
+        return ico.addFromPng(png, undefined, false);
       })
     );
     return ico.encode();
@@ -175,34 +175,42 @@
       if (vips === undefined) return;
       const image = vips.Image.svgloadBuffer(svg);
       switch (format.extension) {
-        case "ico":
+        case "ico": {
           data = await ico(image);
           break;
-        case "icns":
+        }
+        case "icns": {
           data = await icns(image);
           break;
-        case "webp":
+        }
+        case "webp": {
           data = image.webpsaveBuffer({lossless: true});
           break;
-        case "jpg":
+        }
+        case "jpg": {
           data = image.jpegsaveBuffer({background: 255});
           break;
-        case "jp2":
+        }
+        case "jp2": {
           data = image.jp2ksaveBuffer({lossless: true});
           break;
-        case "jxl":
+        }
+        case "jxl": {
           data = image.jxlsaveBuffer({lossless: true});
           break;
-        case "avif":
+        }
+        case "avif": {
           data = image.heifsaveBuffer({
             compression: vips.ForeignHeifCompression.av1,
             lossless: true
           });
           break;
+        }
 
-        default:
+        default: {
           data = image.writeToBuffer(`.${format.extension}`);
           break;
+        }
       }
     }
     let file: File = new File([data], `icon.${format.extension}`, {

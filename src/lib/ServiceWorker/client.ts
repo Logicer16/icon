@@ -41,18 +41,20 @@ export function registerUpdateHandlers(reloadHandlers: ReloadHandlers): void {
     if (!("type" in data)) return;
 
     switch (data.type) {
-      case ServiceWorkerClientMessageTypes.reloadClient:
-        if (reloadHandlers.reload !== undefined) {
-          reloadHandlers.reload();
-        } else {
+      case ServiceWorkerClientMessageTypes.reloadClient: {
+        if (reloadHandlers.reload === undefined) {
           window.location.reload();
+          break;
         }
+        reloadHandlers.reload();
         break;
+      }
 
-      case ServiceWorkerClientMessageTypes.canReloadServiceWorker:
+      case ServiceWorkerClientMessageTypes.canReloadServiceWorker: {
         if (reloadHandlers.updateReady !== undefined) {
           reloadHandlers.updateReady();
         }
+      }
     }
   });
   navigator.serviceWorker.startMessages();

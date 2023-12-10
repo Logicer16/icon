@@ -32,7 +32,7 @@ export class DownloadFormat {
 
   public get extensions(): string[] {
     if (this.additionalExtensions === undefined) return [this.extension];
-    return [this.extension].concat(this.additionalExtensions);
+    return [this.extension, ...this.additionalExtensions];
   }
 
   public static getFormatFromExtension(

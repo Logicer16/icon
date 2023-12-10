@@ -18,153 +18,154 @@ import {version} from "$service-worker";
 
 declare let self: ServiceWorkerGlobalScope;
 
+const cacheId = "SW Cache";
+// const externalCacheId = "SW External Cache";
+
+let coepCredentialless = false;
+
+type Files = Record<string, string | undefined>;
+
+// Is an empty array whilst running the dev server due to the sev server using SSR.
+const fileManifest = self.__WB_MANIFEST;
+
+const files: Files = Object.fromEntries(
+  fileManifest.map((entry) => {
+    const isString = typeof entry === "string";
+
+    let path = isString ? entry : entry.url;
+    if (!path.startsWith("/")) path = `/${path}`;
+
+    let revision: string | undefined;
+    if (!isString) revision = entry.revision ?? undefined;
+
+    return [path, revision];
+  })
+);
+
 // Register service worker if script is running in the browser
-if (typeof window !== "undefined") {
+if (typeof window === "undefined") {
+  initServiceWorker();
+} else {
   if (typeof document !== "undefined") initShouldAutoReload();
   registerServiceWorker();
-} else {
-  initServiceWorker();
+}
+
+/**
+ * Files excluded from bundling by workbox.
+ */
+const cacheExcluded = new Set(["/service-worker.js"]);
+
+/**
+ * Format a local path to include it's revision.
+ * @param path The path of the file.
+ * @returns The formatted path.
+ */
+function formatPath(path: keyof Files): string {
+  // As long as there are no other query parameters (which there shouldn't be for cacheable resources) this should keep working
+  // Default to use the build version if a file version is unavailable.
+  return `${path}?__WB_REVISION__=${files[path] ?? version}`;
+}
+
+/**
+ * Add a HTTP response header to a response.
+ * @param headers The set of headers to add the header to.
+ * @param name The name of the header to add.
+ * @param value The value of the new header.
+ * @returns The updated set of headers.
+ */
+function addHeader(headers: Headers, name: string, value: string): Headers {
+  const newHeaders = new Headers(headers);
+  if (!newHeaders.has(name)) newHeaders.set(name, value);
+  return newHeaders;
+}
+
+/**
+ * Adds a HTTP response headers to a response.
+ * @param originalResponse The response to add the headers to.
+ * @returns The modified response.
+ */
+function addHeaders(originalResponse: Response): Response {
+  let newHeaders = addHeader(
+    originalResponse.headers,
+    "Cross-Origin-Embedder-Policy",
+    coepCredentialless ? "credentialless" : "require-corp"
+  );
+  if (!coepCredentialless) {
+    newHeaders = addHeader(
+      newHeaders,
+      "Cross-Origin-Resource-Policy",
+      "cross-origin"
+    );
+  }
+  newHeaders = addHeader(
+    newHeaders,
+    "Cross-Origin-Opener-Policy",
+    "same-origin"
+  );
+
+  return new Response(originalResponse.body, {
+    headers: newHeaders,
+    status: originalResponse.status,
+    statusText: originalResponse.statusText
+  });
+}
+
+/**
+ * Extract the path component of a URL.
+ * @param url The url to extract the path from.
+ * @returns The url's path component.
+ */
+function extractPath(url: URL): string {
+  return url.href.slice(url.href.indexOf(url.host) + url.host.length);
+}
+
+/**
+ * Create a new cache and add the site's files to the cache to allow offline use.
+ * @returns A promise which fulfils when all of the files have been added to the cache.
+ */
+// eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+async function addFilesToCache(): Promise<void[]> {
+  const cache = await caches.open(cacheId);
+  const cachedPaths = new Set(
+    (await cache.keys()).map((request) => {
+      return extractPath(new URL(request.url));
+    })
+  );
+  const filePaths = Object.keys(files).map((entry) => {
+    return formatPath(entry);
+  });
+  return Promise.all(
+    filePaths.map(async (path) => {
+      if (!cachedPaths.has(path)) return cache.add(path);
+    })
+  );
+}
+
+/**
+ * Removes files from the cache which are no longer needed.
+ * @returns A promise which resolves with the status of each of the `cache.delete()` calls.
+ */
+async function pruneCache(): Promise<boolean[]> {
+  const promises: Promise<boolean>[] = [];
+
+  const cache = await caches.open(cacheId);
+  for (const key of await cache.keys()) {
+    const url = new URL(key.url);
+    const path = extractPath(url);
+    if (path !== formatPath(url.pathname)) promises.push(cache.delete(key));
+  }
+  return Promise.all(promises);
 }
 
 /**
  * Adds service worker listeners.
  */
 function initServiceWorker(): void {
-  const cacheId = "SW Cache";
-  // const externalCacheId = "SW External Cache";
-
-  let coepCredentialless = false;
-
-  type Files = Record<string, string | undefined>;
-
-  // Is an empty array whilst running the dev server due to the sev server using SSR.
-  const fileManifest = self.__WB_MANIFEST;
-
-  const files: Files = Object.fromEntries(
-    fileManifest.map((entry) => {
-      const isString = typeof entry === "string";
-
-      let path = isString ? entry : entry.url;
-      if (!path.startsWith("/")) path = `/${path}`;
-
-      let revision: string | undefined;
-      if (!isString) revision = entry.revision ?? undefined;
-
-      return [path, revision];
-    })
-  );
-
-  /**
-   * Files excluded from bundling by workbox.
-   */
-  const cacheExcluded = ["/service-worker.js"];
-
-  /**
-   * Format a local path to include it's revision.
-   * @param path The path of the file.
-   * @returns The formatted path.
-   */
-  function formatPath(path: keyof Files): string {
-    // As long as there are no other query parameters (which there shouldn't be for cacheable resources) this should keep working
-    // Default to use the build version if a file version is unavailable.
-    return `${path}?__WB_REVISION__=${files[path] ?? version}`;
-  }
-
-  /**
-   * Add a HTTP response header to a response.
-   * @param headers The set of headers to add the header to.
-   * @param name The name of the header to add.
-   * @param value The value of the new header.
-   * @returns The updated set of headers.
-   */
-  function addHeader(headers: Headers, name: string, value: string): Headers {
-    const newHeaders = new Headers(headers);
-    if (!newHeaders.has(name)) newHeaders.set(name, value);
-    return newHeaders;
-  }
-
-  /**
-   * Adds a HTTP response headers to a response.
-   * @param originalResponse The response to add the headers to.
-   * @returns The modified response.
-   */
-  function addHeaders(originalResponse: Response): Response {
-    let newHeaders = addHeader(
-      originalResponse.headers,
-      "Cross-Origin-Embedder-Policy",
-      coepCredentialless ? "credentialless" : "require-corp"
-    );
-    if (!coepCredentialless) {
-      newHeaders = addHeader(
-        newHeaders,
-        "Cross-Origin-Resource-Policy",
-        "cross-origin"
-      );
-    }
-    newHeaders = addHeader(
-      newHeaders,
-      "Cross-Origin-Opener-Policy",
-      "same-origin"
-    );
-
-    return new Response(originalResponse.body, {
-      headers: newHeaders,
-      status: originalResponse.status,
-      statusText: originalResponse.statusText
-    });
-  }
-
-  /**
-   * Extract the path component of a URL.
-   * @param url The url to extract the path from.
-   * @returns The url's path component.
-   */
-  function extractPath(url: URL): string {
-    return url.href.substring(url.href.indexOf(url.host) + url.host.length);
-  }
-
   self.addEventListener("install", (event) => {
-    // Create a new cache and add all files to it
-    /**
-     * The the site's files to the cache to allow offline use.
-     * @returns A promise which fulfils when all of the files have been added to the cache.
-     */
-    // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
-    async function addFilesToCache(): Promise<void[]> {
-      const cache = await caches.open(cacheId);
-      const cachedPaths = (await cache.keys()).map((request) => {
-        return extractPath(new URL(request.url));
-      });
-      const filePaths = Object.keys(files).map((entry) => {
-        return formatPath(entry);
-      });
-      return Promise.all(
-        filePaths.map(async (path) => {
-          if (!cachedPaths.includes(path)) return cache.add(path);
-        })
-      );
-    }
-
     event.waitUntil(addFilesToCache());
   });
 
   self.addEventListener("activate", (event) => {
-    /**
-     * Removes files from the cache which are no longer needed.
-     * @returns A promise which resolves with the status of each of the `cache.delete()` calls.
-     */
-    async function pruneCache(): Promise<boolean[]> {
-      const promises: Promise<boolean>[] = [];
-
-      const cache = await caches.open(cacheId);
-      for (const key of await cache.keys()) {
-        const url = new URL(key.url);
-        const path = extractPath(url);
-        if (path !== formatPath(url.pathname)) promises.push(cache.delete(key));
-      }
-      return Promise.all(promises);
-    }
-
     event.waitUntil(pruneCache());
   });
 
@@ -176,27 +177,29 @@ function initServiceWorker(): void {
     if (!("type" in data)) return;
 
     switch (data.type) {
-      case ServiceWorkerMessageTypes.coepCredentialless:
+      case ServiceWorkerMessageTypes.coepCredentialless: {
         if (!("value" in data) || typeof data.value !== "boolean") break;
         coepCredentialless = data.value;
         break;
+      }
 
-      case ServiceWorkerMessageTypes.canReloadServiceWorker:
+      case ServiceWorkerMessageTypes.canReloadServiceWorker: {
         self.clients
           .matchAll()
           .then((clients) => {
-            clients.forEach((client) => {
+            for (const client of clients) {
               client.postMessage({
                 type: ServiceWorkerClientMessageTypes.canReloadServiceWorker
               });
-            });
+            }
           })
           .catch((error) => {
             throw error;
           });
         break;
+      }
 
-      case ServiceWorkerMessageTypes.reloadServiceWorker:
+      case ServiceWorkerMessageTypes.reloadServiceWorker: {
         self
           .skipWaiting()
           .then(async () => {
@@ -206,15 +209,16 @@ function initServiceWorker(): void {
             return self.clients.matchAll();
           })
           .then((clients) => {
-            clients.forEach((client) => {
+            for (const client of clients) {
               client.postMessage({
                 type: ServiceWorkerClientMessageTypes.reloadClient
               });
-            });
+            }
           })
           .catch((error) => {
             throw error;
           });
+      }
     }
   });
 
@@ -245,7 +249,7 @@ function initServiceWorker(): void {
 
       if (
         process.env.NODE_ENV === "production" &&
-        !cacheExcluded.includes(url.pathname)
+        !cacheExcluded.has(url.pathname)
       ) {
         console.warn(
           `Requested to fetch external resource at: ${url.href}\nThis resource will not be cached for offline use.`

@@ -24,17 +24,15 @@ function contrast(colour: Color, comparison: ColorTypes): number {
 export function contrastBWColorCSS(
   color: string | Readable<string>
 ): Readable<string> {
-  let processedColor: Readable<Color>;
-  if (typeof color === "string") {
-    processedColor = readable(new Color(color));
-  } else {
-    processedColor = derived([color], ([$color]) => {
-      return new Color($color);
-    });
-  }
+  const processedColour =
+    typeof color === "string"
+      ? readable(new Color(color))
+      : derived([color], ([$color]) => {
+          return new Color($color);
+        });
 
   return derived(
-    [processedColor, prefersColorScheme],
+    [processedColour, prefersColorScheme],
     ([$processedColor, $prefersColorScheme]) => {
       const black = contrast($processedColor, "black");
       const white = contrast($processedColor, "white");

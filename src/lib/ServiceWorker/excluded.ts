@@ -5,7 +5,7 @@
 /**
  * Paths which the service worker is excluded from operating on.
  */
-const serviceWorkerExclude = ["/preview"];
+const serviceWorkerExclude = new Set(["/preview"]);
 
 /**
  * Checks if the page ID is an excluded path.
@@ -14,5 +14,5 @@ const serviceWorkerExclude = ["/preview"];
  */
 export function idIsExcluded(pageId: string | null): boolean {
   if (pageId === null) return true;
-  return serviceWorkerExclude.includes(pageId);
+  return serviceWorkerExclude.has(pageId);
 }

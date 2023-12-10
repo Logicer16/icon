@@ -3,14 +3,14 @@
  */
 import {Config} from "tailwindcss";
 import forms from "@tailwindcss/forms";
-import {join} from "path";
+import {join} from "node:path";
 import {skeleton} from "@skeletonlabs/tw-plugin";
 
 const config: Config = {
   content: [
     "./src/**/*.{html,js,svelte,ts}",
     join(
-      require.resolve("@skeletonlabs/skeleton"),
+      import.meta.resolve("@skeletonlabs/skeleton"),
       "../**/*.{html,js,svelte,ts}"
     )
   ],
