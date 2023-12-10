@@ -1,11 +1,10 @@
 <script lang="ts">
   import "./style.postcss";
-  import {derived, readable, type Readable} from "svelte/store";
   import {
     processSvg,
-    type SVGData,
     type SVGProcessParameters
   } from "$lib/svgManipulator/svgManipulator";
+  import {readable, type Readable} from "svelte/store";
   import {browser} from "$app/environment";
   import SvgPreview from "$lib/SVGPreview/SVGPreview.svelte";
 
@@ -38,16 +37,11 @@
   // eslint-disable-next-line @typescript-eslint/naming-convention
   const SVGParameters = getSVGParameterStore();
 
-  let svg = derived(
-    [SVGParameters],
-    ([$SVGParameters], set: (value: SVGData) => void) => {
-      set(processSvg($SVGParameters));
-    }
-  );
+  $: svg = processSvg($SVGParameters);
 </script>
 
 <div class="w-full">
   {#if browser}
-    <SvgPreview svg="{$svg}"></SvgPreview>
+    <SvgPreview {svg}></SvgPreview>
   {/if}
 </div>
