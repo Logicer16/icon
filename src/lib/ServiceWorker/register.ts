@@ -130,9 +130,10 @@ function onLoad(): void {
       clearInterval(updateIntervalID);
       updateIntervalID = setInterval(
         () => {
-          registration.update().catch((error) => {
+          registration.update().catch((error: unknown) => {
             console.error(
-              `Could not register service worker with error: ${error}`
+              `Could not register service worker with error:`,
+              error
             );
           });
         },
@@ -149,7 +150,7 @@ function onLoad(): void {
       });
       processServiceWorkerState(serviceWorker);
     })
-    .catch((error) => {
+    .catch((error: unknown) => {
       throw error;
     });
   loaded = true;

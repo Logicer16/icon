@@ -13,17 +13,18 @@
     "preview:open": "vite preview --open",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-    "style": "npm run lint && npm run prettier",
+    "style": "pnpm lint && pnpm prettier",
     "lint": "eslint . --fix",
     "lint:ci": "eslint .",
     "prettier": "prettier --write .",
-    "prettier:ci": "prettier --check ."
+    "prettier:ci": "prettier --check .",
+    "type-coverage": "type-coverage"
   },
   "devDependencies": {
     "@floating-ui/dom": "^1.5.3",
     "@logicer/eslint-plugin": "^2.3.2",
     "@logicer/prettier-config": "^2.0.2",
-    "@logicer/tsconfig": "^3.0.0",
+    "@logicer/tsconfig": "^4.0.0",
     "@primer/octicons": "^19.8.0",
     "@shockpkg/icon-encoder": "^3.1.1",
     "@skeletonlabs/skeleton": "^2.4.0",
@@ -57,7 +58,9 @@
     "svelte-check": "^3.5.2",
     "tailwindcss": "^3.3.2",
     "ts-node": "11.0.0-beta.1",
+    "ts-plugin-type-coverage": "^2.26.4",
     "tslib": "^2.6.2",
+    "type-coverage": "^2.27.1",
     "typescript": "^5.2.2",
     "typescript-svelte-plugin": "^0.3.34",
     "vite": "^4.5.0",
@@ -94,5 +97,15 @@
         "current"
       ]
     }
+  },
+  "typeCoverage": {
+    "atLeast": 100,
+    "cache": true,
+    "strict": true,
+    "ignoreCatch": true,
+    "reportSemanticError": true,
+    "ignoreFiles": [
+      "build/**/*"
+    ]
   }
 }

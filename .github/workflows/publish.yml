@@ -39,6 +39,9 @@ jobs:
       - name: Check
         run: pnpm check --output machine
 
+      - name: Type Converage
+        run: pnpm type-coverage
+
       - name: Run ESLint
         run: pnpm lint:ci --output-file .eslint_report.json --format json
         continue-on-error: true
@@ -53,7 +56,7 @@ jobs:
         run: pnpm prettier:ci
 
       - name: Build
-        run: npm run build
+        run: pnpm build
 
       - name: Upload Artifacts
         uses: actions/upload-pages-artifact@v2

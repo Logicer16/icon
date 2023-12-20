@@ -27,3 +27,26 @@ export enum ServiceWorkerClientMessageTypes {
   canReloadServiceWorker,
   reloadClient
 }
+
+export type ServiceWorkerClientMessageData = MessageData<true>;
+export type ServiceWorkerMessageData = MessageData<false>;
+
+interface MessageData<Client = boolean> {
+  type: Client extends true
+    ? ServiceWorkerClientMessageTypes
+    : ServiceWorkerMessageTypes;
+}
+
+/**
+ * Validate that the a message event's data conforms to the relevant interface.
+ * @param data The event data property.
+ * @returns A boolean indicating if the data conforms to the relevant interface.
+ * @see MessageData
+ */
+export function validateMessageData<Client = boolean>(
+  data: unknown
+): data is MessageData<Client> {
+  // type-coverage:ignore-next-line
+  if (data instanceof Object && "type" in data) return true;
+  return false;
+}

@@ -3,7 +3,8 @@
  */
 import {
   ServiceWorkerClientMessageTypes,
-  ServiceWorkerMessageTypes
+  ServiceWorkerMessageTypes,
+  validateMessageData
 } from "./messages.js";
 import {fetchUpdatedServiceWorker} from "./common.js";
 
@@ -33,29 +34,29 @@ export interface ReloadHandlers {
  * @param reloadHandlers The handlers for events in the flow of reloading a service worker.
  */
 export function registerUpdateHandlers(reloadHandlers: ReloadHandlers): void {
-  navigator.serviceWorker.addEventListener("message", (event) => {
-    const data: unknown = event.data;
-    if (!(data instanceof Object)) {
-      return;
-    }
-    if (!("type" in data)) return;
+  navigator.serviceWorker.addEventListener(
+    "message",
+    (event: MessageEvent<unknown>) => {
+      if (!validateMessageData<true>(event.data)) return;
+      const data = event.data;
 
-    switch (data.type) {
-      case ServiceWorkerClientMessageTypes.reloadClient: {
-        if (reloadHandlers.reload === undefined) {
-          window.location.reload();
+      switch (data.type) {
+        case ServiceWorkerClientMessageTypes.reloadClient: {
+          if (reloadHandlers.reload === undefined) {
+            window.location.reload();
+            break;
+          }
+          reloadHandlers.reload();
           break;
         }
-        reloadHandlers.reload();
-        break;
-      }
 
-      case ServiceWorkerClientMessageTypes.canReloadServiceWorker: {
-        if (reloadHandlers.updateReady !== undefined) {
-          reloadHandlers.updateReady();
+        case ServiceWorkerClientMessageTypes.canReloadServiceWorker: {
+          if (reloadHandlers.updateReady !== undefined) {
+            reloadHandlers.updateReady();
+          }
         }
       }
     }
-  });
+  );
   navigator.serviceWorker.startMessages();
 }

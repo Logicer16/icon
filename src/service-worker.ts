@@ -12,7 +12,8 @@ import {
 } from "./lib/ServiceWorker/register.js";
 import {
   ServiceWorkerClientMessageTypes,
-  ServiceWorkerMessageTypes
+  ServiceWorkerMessageTypes,
+  validateMessageData
 } from "./lib/ServiceWorker/messages.js";
 import {version} from "$service-worker";
 
@@ -170,11 +171,9 @@ function initServiceWorker(): void {
   });
 
   self.addEventListener("message", (event) => {
+    // type-coverage:ignore-next-line
     const data: unknown = event.data;
-    if (!(data instanceof Object)) {
-      return;
-    }
-    if (!("type" in data)) return;
+    if (!validateMessageData<false>(data)) return;
 
     switch (data.type) {
       case ServiceWorkerMessageTypes.coepCredentialless: {
@@ -193,7 +192,7 @@ function initServiceWorker(): void {
               });
             }
           })
-          .catch((error) => {
+          .catch((error: unknown) => {
             throw error;
           });
         break;
@@ -215,7 +214,7 @@ function initServiceWorker(): void {
               });
             }
           })
-          .catch((error) => {
+          .catch((error: unknown) => {
             throw error;
           });
       }
