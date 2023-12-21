@@ -12,11 +12,10 @@
     type ToastSettings
   } from "@skeletonlabs/skeleton";
   import {IconIcns, IconIco} from "@shockpkg/icon-encoder";
+  import {vips, type Vips} from "$lib/vips/vips";
   import {browser} from "$app/environment";
   import FileSaver from "file-saver";
   import type {SVGData} from "$lib/svgManipulator/svgManipulator";
-  import {vips} from "$lib/vips/vips";
-  import type Vips from "wasm-vips";
 
   export let svg: SVGData | undefined;
 

@@ -37,3 +37,5 @@ if (!import.meta.env.SSR && window.crossOriginIsolated) {
       vips = newVips;
     });
 }
+
+export {VipsType as Vips};

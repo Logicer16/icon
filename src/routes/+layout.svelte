@@ -11,13 +11,14 @@
   import {
     autoModeWatcher,
     initializeStores,
+    storePopup,
     Toast
   } from "@skeletonlabs/skeleton";
   import {description, serviceWorkerName, themeColour, title} from "$lib/const";
   import {idIsExcluded} from "$lib/ServiceWorker/excluded";
   import {page} from "$app/stores";
+  // eslint-disable-next-line import/no-unresolved
   import {pwaInfo} from "virtual:pwa-info";
-  import {storePopup} from "@skeletonlabs/skeleton";
 
   storePopup.set({arrow, autoUpdate, computePosition, flip, offset, shift});
 

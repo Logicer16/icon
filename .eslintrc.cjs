@@ -20,6 +20,26 @@ module.exports = {
     es2017: true,
     node: true
   },
+  rules: {
+    "import/no-unresolved": [
+      "error",
+      {
+        // Regex
+        ignore: [
+          "\\$app/environment",
+          "\\$app/forms",
+          "\\$app/navigation",
+          "\\$app/paths",
+          "\\$app/stores",
+          "\\$env/dynamic/private",
+          "\\$env/dynamic/public",
+          "\\$env/static/private",
+          "\\$env/static/public",
+          "\\$service-worker"
+        ]
+      }
+    ]
+  },
   overrides: [
     {
       files: ["*.svelte"],
@@ -28,7 +48,10 @@ module.exports = {
         parser: "@typescript-eslint/parser"
       },
       rules: {
-        "jsdoc/require-file-overview": "off"
+        "jsdoc/require-file-overview": "off",
+
+        "import/no-mutable-exports": "off",
+        "import/unambiguous": "off"
       }
     },
     {
