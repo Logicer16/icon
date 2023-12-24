@@ -14,6 +14,7 @@ import type {SvelteKitPWAOptions} from "@vite-pwa/sveltekit/*";
 const startUrl = "/";
 
 export const webmanifest: SvelteKitPWAOptions["manifest"] = {
+  // eslint-disable-next-line camelcase
   background_color: startupBackgroundColour,
   description: description,
   icons: [
@@ -147,7 +148,10 @@ export const webmanifest: SvelteKitPWAOptions["manifest"] = {
   id: startUrl,
   name: title,
   scope: startUrl,
+  // eslint-disable-next-line camelcase
   short_name: "Icon",
+  // eslint-disable-next-line camelcase
   start_url: startUrl,
+  // eslint-disable-next-line camelcase
   theme_color: themeColour
 };

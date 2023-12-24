@@ -47,7 +47,8 @@ export default defineConfig({
       filename: `${serviceWorkerName}.ts`,
       injectManifest: {
         globPatterns: [`client/**/*.{${extensions}}`],
-        maximumFileSizeToCacheInBytes: 8 * Math.pow(1000, 2)
+        // prettier-ignore
+        maximumFileSizeToCacheInBytes: 8 * (1000 ** 2)
       },
       injectRegister: undefined,
       manifest: webmanifest,

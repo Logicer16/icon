@@ -6,7 +6,7 @@ import rawSVG from "./favicon.svg?raw";
 import {themeColour} from "../const";
 import type Vips from "wasm-vips";
 
-export type SVGData = Vips.Blob & BlobPart;
+export type SVGData = BlobPart & Vips.Blob;
 
 /**
  * Parameters to process the svg against.

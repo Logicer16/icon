@@ -6,8 +6,8 @@ import {ServiceWorkerMessageTypes} from "./messages.js";
 import {serviceWorkerName} from "$lib/const";
 
 let loaded = false;
-let updateIntervalID: number | NodeJS.Timeout | undefined;
-let updateCheckIntervalID: number | NodeJS.Timeout | undefined;
+let updateIntervalID: NodeJS.Timeout | number | undefined;
+let updateCheckIntervalID: NodeJS.Timeout | number | undefined;
 
 let shouldAutoReload: true | undefined;
 

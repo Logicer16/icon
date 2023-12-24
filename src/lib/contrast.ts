@@ -22,7 +22,7 @@ function contrast(colour: Color, comparison: ColorTypes): number {
  * @returns Either black or white as css colours depending on which contrasts more.
  */
 export function contrastBWColorCSS(
-  color: string | Readable<string>
+  color: Readable<string> | string
 ): Readable<string> {
   const processedColour =
     typeof color === "string"

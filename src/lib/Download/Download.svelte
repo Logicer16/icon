@@ -136,8 +136,6 @@
       {OSTypes: ["ic05", "ic11"], dimension: 32},
       {OSTypes: ["ic04"], dimension: 16}
     ];
-    /* eslint-enable @typescript-eslint/naming-convention */
-    dimensions;
     await Promise.all(
       dimensions.map(async (dimension) => {
         if (vips === undefined) {
@@ -212,7 +210,7 @@
         }
       }
     }
-    let file: File = new File([data], `icon.${format.extension}`, {
+    const file = new File([data], `icon.${format.extension}`, {
       type: format.mime
     });
     return file;

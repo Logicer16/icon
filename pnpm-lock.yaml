@@ -80,6 +80,9 @@ devDependencies:
   eslint-plugin-prettier:
     specifier: ^5.0.1
     version: 5.0.1(eslint-config-prettier@8.10.0)(eslint@8.52.0)(prettier@3.1.0)
+  eslint-plugin-regex:
+    specifier: ^1.10.0
+    version: 1.10.0(eslint@8.52.0)
   eslint-plugin-regexp:
     specifier: ^2.1.2
     version: 2.1.2(eslint@8.52.0)
@@ -3499,6 +3502,15 @@ packages:
       prettier: 3.1.0
       prettier-linter-helpers: 1.0.0
       synckit: 0.8.5
+    dev: true
+
+  /eslint-plugin-regex@1.10.0(eslint@8.52.0):
+    resolution: {integrity: sha512-C8/qYKkkbIb0epxKzaz4aw7oVAOmm19fJpR/moUrUToq/vc4xW4sEKMlTQqH6EtNGpvLjYsbbZRlWNWwQGeTSA==}
+    engines: {node: '>=6.0.0'}
+    peerDependencies:
+      eslint: '>=4.0.0'
+    dependencies:
+      eslint: 8.52.0
     dev: true
 
   /eslint-plugin-regexp@2.1.2(eslint@8.52.0):

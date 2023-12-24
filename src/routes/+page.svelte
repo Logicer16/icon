@@ -8,7 +8,7 @@
   let fillColour: string = themeColour;
   let backgroundColour: string = themeColour;
 
-  $: svg = processSvg({fillColour: fillColour});
+  $: svg = processSvg({fillColour});
 </script>
 
 <div class="container mx-auto space-y-8 p-8">
