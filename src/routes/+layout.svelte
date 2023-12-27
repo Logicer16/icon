@@ -26,13 +26,18 @@
 
   const serviceWorkerPath = `/${serviceWorkerName}.js`;
   const scriptType = process.env.NODE_ENV === "development" ? "module" : "";
+  const autoModeWatcherTag =
+    `<` +
+    `script>${autoModeWatcher.toString()} autoModeWatcher();</script` +
+    `>`;
 
-  $: webManifest = pwaInfo ? pwaInfo.webManifest.linkTag : "";
   $: idAllowed = !idIsExcluded($page.route.id);
 </script>
 
 <svelte:head>
-  {@html webManifest}
+  <!-- Static content generated at build-time -->
+  <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+  {@html pwaInfo?.webManifest.linkTag}
   <title>{title}</title>
   <meta name="description" content="{description}" />
   <meta name="theme-color" content="{themeColour}" />
@@ -41,13 +46,15 @@
     <meta name="color-scheme" content="dark light" />
   {/if}
   <script
-    src="{serviceWorkerPath}"
-    defer
     async
-    type="{scriptType}"
-    data-should-auto-reload="{idAllowed}"></script>
-  {@html `<` +
-    `script>${autoModeWatcher.toString()} autoModeWatcher();</script>`}
+    data-should-auto-reload="{idAllowed}"
+    defer
+    src="{serviceWorkerPath}"
+    type="{scriptType}">
+  </script>
+  <!-- Static content generated at build-time -->
+  <!-- eslint-disable-next-line svelte/no-at-html-tags -->
+  {@html autoModeWatcherTag}
 </svelte:head>
 
 <main>
@@ -55,9 +62,9 @@
 </main>
 
 <Toast
-  position="br"
+  buttonAction="btn btn-sm variant-filled"
   buttonDismiss="btn-icon btn-icon-sm variant-filled"
-  buttonAction="btn btn-sm variant-filled" />
+  position="br" />
 
 {#await import("$lib/ReloadPrompt/ReloadPrompt.svelte") then { default: ReloadPrompt }}
   <ReloadPrompt></ReloadPrompt>

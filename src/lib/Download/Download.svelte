@@ -293,13 +293,14 @@
 <div class="container flex flex-wrap gap-x-2 gap-y-4">
   {#if canUseClipboardAPI}
     <div class="basis-full">
-      <button type="button" class="variant-soft btn" on:click="{copy}"
+      <button class="variant-soft btn" type="button" on:click="{copy}"
         >Copy png</button>
     </div>
   {/if}
   <div class="inline space-y-0">
     <button
       class="variant-soft btn w-48 justify-between"
+      type="button"
       use:popup="{popupCombobox}">
       <span
         >{DownloadFormat.getFormatFromExtension(downloadFormats, comboboxValue)
@@ -310,20 +311,20 @@
       class="card max-h-64 w-48 overflow-y-scroll shadow-xl"
       data-popup="popupCombobox">
       <ListBox rounded="rounded-none">
-        {#each downloadFormats as downloadFormat}
+        {#each downloadFormats as downloadFormat (downloadFormat.extension)}
           <ListBoxItem
-            bind:group="{comboboxValue}"
             name="medium"
             value="{downloadFormat.extension}"
+            bind:group="{comboboxValue}"
             >{downloadFormat.displayName}</ListBoxItem>
         {/each}
       </ListBox>
     </div>
   </div>
-  <button type="button" class="variant-soft btn" on:click="{download}"
+  <button class="variant-soft btn" type="button" on:click="{download}"
     >Download</button>
   {#if canUseFileSystemAPI}
-    <button type="button" class="variant-soft btn" on:click="{saveAs}"
+    <button class="variant-soft btn" type="button" on:click="{saveAs}"
       >Save As</button>
   {/if}
 </div>

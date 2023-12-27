@@ -16,11 +16,11 @@
   <div class="w-80">
     <SvgPreview {svg}></SvgPreview>
   </div>
-  <ColourPicker bind:colour="{fillColour}" id="fill" displayName="Fill"
+  <ColourPicker id="fill" displayName="Fill" bind:colour="{fillColour}"
   ></ColourPicker>
   <ColourPicker
-    bind:colour="{backgroundColour}"
     id="background"
-    displayName="Background"></ColourPicker>
+    displayName="Background"
+    bind:colour="{backgroundColour}"></ColourPicker>
   <Download {svg}></Download>
 </div>
