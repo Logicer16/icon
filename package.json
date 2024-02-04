@@ -98,7 +98,8 @@
     "ignoreCatch": true,
     "reportSemanticError": true,
     "ignoreFiles": [
-      "build/**/*"
+      "build/**/*",
+      "vite.config.ts.*"
     ]
   }
 }

@@ -3,7 +3,7 @@
  */
 import {fetchUpdatedServiceWorker} from "./common.js";
 import {ServiceWorkerMessageTypes} from "./messages.js";
-import {serviceWorkerName} from "$lib/const";
+import {serviceWorkerName} from "../const";
 
 let loaded = false;
 let updateIntervalID: NodeJS.Timeout | number | undefined;
