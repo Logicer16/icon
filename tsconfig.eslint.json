@@ -12,6 +12,6 @@
     ".prettierrc.js",
     "svelte.config.js",
     "vite.config.ts",
-    ".eslintrc.cjs"
+    "eslint.config.js"
   ]
 }

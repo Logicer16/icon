@@ -11,6 +11,8 @@
     type PopupSettings,
     type ToastSettings
   } from "@skeletonlabs/skeleton";
+  // import-js/eslint-plugin-import#1883
+  // eslint-disable-next-line import/named
   import {IconIcns, IconIco} from "@shockpkg/icon-encoder";
   import {vips, type Vips} from "$lib/vips/vips";
   import {browser} from "$app/environment";

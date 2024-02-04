@@ -1,3 +1,7 @@
+/**
+ * @file The prettier config.
+ */
+
 import logicerPrettierConfig from "@logicer/prettier-config";
 
 /**
@@ -5,8 +9,8 @@ import logicerPrettierConfig from "@logicer/prettier-config";
  */
 const prettierConfig = {
   ...logicerPrettierConfig,
-  plugins: ["prettier-plugin-svelte", "prettier-plugin-tailwindcss"],
   overrides: [{files: "*.svelte", options: {parser: "svelte"}}],
+  plugins: ["prettier-plugin-svelte", "prettier-plugin-tailwindcss"],
   svelteStrictMode: true
 };
 

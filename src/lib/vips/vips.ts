@@ -38,4 +38,4 @@ if (!import.meta.env.SSR && window.crossOriginIsolated) {
     });
 }
 
-export {VipsType as Vips};
+export type {default as Vips} from "wasm-vips";

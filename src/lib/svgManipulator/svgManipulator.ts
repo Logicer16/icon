@@ -4,7 +4,7 @@
 // eslint-disable-next-line n/file-extension-in-import
 import rawSVG from "./favicon.svg?raw";
 import {themeColour} from "../const";
-import type Vips from "wasm-vips";
+import type {Vips} from "$lib/vips/vips";
 
 export type SVGData = BlobPart & Vips.Blob;
 
