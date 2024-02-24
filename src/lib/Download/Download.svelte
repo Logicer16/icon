@@ -17,6 +17,7 @@
   } from "$lib/Download/DownloadFormat";
   import type {SVGData} from "$lib/svgManipulator/svgManipulator";
   import {type Vips, vips} from "$lib/vips/vips";
+  import {encode as qoiEncode, type QOIDataDescription} from "qoijs";
 
   export let svg: SVGData | undefined;
 
@@ -54,8 +55,9 @@
     {extension: "avif"},
     // Unsupported due to GPL licencing.
     // {extension: "heif"},
-    {extension: "tiff"}
-    // {displayName: "jpeg 2000", extension: "jp2"}
+    {extension: "tiff"},
+    // {displayName: "jpeg 2000", extension: "jp2"},
+    {extension: "qoi"},
   ];
 
   const downloadFormats = downloadFormatsOptions.map((options) => {
@@ -89,6 +91,24 @@
     background: "variant-filled-success",
     message: "Copied!"
   };
+
+/**
+ * Generate an .qoi file from an image.
+ * @param image The image to convert.
+ * @returns Encoded ico file data.
+ */
+function qoi(image: Vips.Image): ArrayBuffer | undefined {
+  if (vips === undefined) return;
+  const processedImage = image.colourspace(vips.Interpretation.srgb);
+
+  const metadata: QOIDataDescription = {
+    height: image.height,
+    width: image.width,
+    colorspace: 0,
+    channels: image.hasAlpha() ? 4 : 3
+  }
+  return qoiEncode(processedImage.writeToMemory(), metadata);
+}
 
   /**
    * Generate an .ico file from an image.
@@ -182,6 +202,10 @@
           data = await icns(image);
           break;
         }
+        case "qoi": {
+          data = qoi(image);
+          break;
+        }
         case "webp": {
           data = image.webpsaveBuffer({lossless: true});
           break;
@@ -212,6 +236,9 @@
         }
       }
     }
+
+    if (data === undefined) return;
+
     const file = new File([data], `icon.${format.extension}`, {
       type: format.mime
     });
