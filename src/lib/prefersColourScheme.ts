@@ -1,7 +1,7 @@
 /**
  * @file Determine the user's prefered colour scheme.
  */
-import {readable, type Readable} from "svelte/store";
+import {type Readable, readable} from "svelte/store";
 import {browser} from "$app/environment";
 
 export const prefersColorScheme = getPrefersColourSchemeStore();

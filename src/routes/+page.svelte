@@ -1,6 +1,6 @@
 <script lang="ts">
-  import {themeColour, title} from "$lib/const";
   import ColourPicker from "$lib/ColourPicker/ColourPicker.svelte";
+  import {themeColour, title} from "$lib/const";
   import Download from "$lib/Download/Download.svelte";
   import {processSvg} from "$lib/svgManipulator/svgManipulator";
   import SvgPreview from "$lib/SVGPreview/SVGPreview.svelte";

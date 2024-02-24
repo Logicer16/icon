@@ -5,7 +5,7 @@
   export let id = "";
   export let displayName: string = id;
 
-  const textColor = contrastBWColorCSS(colour);
+  $: textColor = contrastBWColorCSS(colour);
 </script>
 
 <div class="flex space-x-2 place-self-center">

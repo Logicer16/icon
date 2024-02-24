@@ -1,17 +1,17 @@
 /**
  * @file The vite configuration.
  */
-import {defineConfig, normalizePath} from "vite";
 import {dirname} from "node:path";
-import {fileURLToPath} from "node:url";
-import {nodePolyfills} from "vite-plugin-node-polyfills";
 import process from "node:process";
-import {purgeCss} from "vite-plugin-tailwind-purgecss";
-import {serviceWorkerName} from "./src/lib/const.js";
+import {fileURLToPath} from "node:url";
 import {sveltekit} from "@sveltejs/kit/vite";
 import {SvelteKitPWA} from "@vite-pwa/sveltekit";
-import topLevelAwait from "vite-plugin-top-level-await";
+import {defineConfig, normalizePath} from "vite";
+import {nodePolyfills} from "vite-plugin-node-polyfills";
 import {viteStaticCopy} from "vite-plugin-static-copy";
+import {purgeCss} from "vite-plugin-tailwind-purgecss";
+import topLevelAwait from "vite-plugin-top-level-await";
+import {serviceWorkerName} from "./src/lib/const.js";
 import {webmanifest} from "./src/lib/ServiceWorker/webmanifest.js";
 
 const extensions = [

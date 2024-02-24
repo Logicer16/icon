@@ -14,11 +14,12 @@
     storePopup,
     Toast
   } from "@skeletonlabs/skeleton";
-  import {description, serviceWorkerName, themeColour, title} from "$lib/const";
-  import {idIsExcluded} from "$lib/ServiceWorker/excluded";
-  import {page} from "$app/stores";
   // eslint-disable-next-line import/no-unresolved
   import {pwaInfo} from "virtual:pwa-info";
+  import {assets} from "$app/paths";
+  import {page} from "$app/stores";
+  import {description, serviceWorkerName, themeColour, title} from "$lib/const";
+  import {idIsExcluded} from "$lib/ServiceWorker/excluded";
 
   storePopup.set({arrow, autoUpdate, computePosition, flip, offset, shift});
 
@@ -30,6 +31,13 @@
     `<` +
     `script>${autoModeWatcher.toString()} autoModeWatcher();</script` +
     `>`;
+
+  const preloadWasm = [
+    `${assets}/vips/vips.wasm`,
+    `${assets}/vips/vips-heif.wasm`,
+    `${assets}/vips/vips-jxl.wasm`,
+    `${assets}/vips/vips-resvg.wasm`
+  ];
 
   $: idAllowed = !idIsExcluded($page.route.id);
 </script>
@@ -55,6 +63,14 @@
   <!-- Static content generated at build-time -->
   <!-- eslint-disable-next-line svelte/no-at-html-tags -->
   {@html autoModeWatcherTag}
+  {#each preloadWasm as resource (resource)}
+    <link
+      as="fetch"
+      crossorigin="anonymous"
+      href="{resource}"
+      rel="preload"
+      type="application/wasm" />
+  {/each}
 </svelte:head>
 
 <main>

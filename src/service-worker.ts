@@ -6,16 +6,13 @@
 /// <reference lib="webworker" />
 
 import "workbox-precaching";
-import {
-  initShouldAutoReload,
-  registerServiceWorker
-} from "./lib/ServiceWorker/register.js";
+import {version} from "$service-worker";
 import {
   ServiceWorkerClientMessageTypes,
   ServiceWorkerMessageTypes,
   validateMessageData
 } from "./lib/ServiceWorker/messages.js";
-import {version} from "$service-worker";
+import {initShouldAutoReload, register} from "./lib/ServiceWorker/register.js";
 
 declare let self: ServiceWorkerGlobalScope;
 
@@ -48,7 +45,7 @@ if (typeof window === "undefined") {
   initServiceWorker();
 } else {
   if (typeof document !== "undefined") initShouldAutoReload();
-  registerServiceWorker();
+  register();
 }
 
 /**

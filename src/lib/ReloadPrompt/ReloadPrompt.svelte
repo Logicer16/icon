@@ -1,11 +1,11 @@
 <script lang="ts">
   import {getToastStore, type ToastSettings} from "@skeletonlabs/skeleton";
+  import {page} from "$app/stores";
   import {
     registerUpdateHandlers,
     reloadServiceWorker
   } from "$lib/ServiceWorker/client";
   import {idIsExcluded} from "$lib/ServiceWorker/excluded";
-  import {page} from "$app/stores";
 
   const toastStore = getToastStore();
   const toastSettings: ToastSettings = {

@@ -1,8 +1,6 @@
 <script lang="ts">
-  import {
-    DownloadFormat,
-    type DownloadFormatOptions
-  } from "$lib/Download/DownloadFormat";
+  // import-js/eslint-plugin-import#1883
+  import {IconIcns, IconIco} from "@shockpkg/icon-encoder";
   import {
     getToastStore,
     ListBox,
@@ -11,13 +9,14 @@
     type PopupSettings,
     type ToastSettings
   } from "@skeletonlabs/skeleton";
-  // import-js/eslint-plugin-import#1883
-  // eslint-disable-next-line import/named
-  import {IconIcns, IconIco} from "@shockpkg/icon-encoder";
-  import {vips, type Vips} from "$lib/vips/vips";
-  import {browser} from "$app/environment";
   import FileSaver from "file-saver";
+  import {browser} from "$app/environment";
+  import {
+    DownloadFormat,
+    type DownloadFormatOptions
+  } from "$lib/Download/DownloadFormat";
   import type {SVGData} from "$lib/svgManipulator/svgManipulator";
+  import {type Vips, vips} from "$lib/vips/vips";
 
   export let svg: SVGData | undefined;
 
@@ -138,6 +137,7 @@
       {OSTypes: ["ic05", "ic11"], dimension: 32},
       {OSTypes: ["ic04"], dimension: 16}
     ];
+    /* eslint-enable @typescript-eslint/naming-convention */
     await Promise.all(
       dimensions.map(async (dimension) => {
         if (vips === undefined) {

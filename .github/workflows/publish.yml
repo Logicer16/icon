@@ -1,9 +1,9 @@
 name: Publish
 
 on:
-  push:
-  pull_request:
-  workflow_dispatch:
+  push: {}
+  pull_request: {}
+  workflow_dispatch: {}
 
 jobs:
   Build:
@@ -28,7 +28,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: "pnpm"
+          cache: pnpm
 
       - name: Install dependencies
         run: pnpm install
@@ -50,7 +50,7 @@ jobs:
         uses: ataylorme/eslint-annotate-action@v2
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
-          report-json: ".eslint_report.json"
+          report-json: .eslint_report.json
 
       - name: Run Prettier
         run: pnpm prettier:ci
@@ -62,7 +62,7 @@ jobs:
         uses: actions/upload-pages-artifact@v2
         with:
           # this should match the `pages` option in your adapter-static options
-          path: "build/"
+          path: build/
 
   Publish:
     if: ${{ (github.event_name != 'pull_request') && (github.ref_name == 'main') }}

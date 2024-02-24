@@ -1,10 +1,10 @@
 /**
  * @file The tailwind configuration.
  */
-import type {Config} from "tailwindcss";
-import forms from "@tailwindcss/forms";
 import {join} from "node:path";
 import {skeleton} from "@skeletonlabs/tw-plugin";
+import forms from "@tailwindcss/forms";
+import type {Config} from "tailwindcss";
 
 const config: Config = {
   content: [

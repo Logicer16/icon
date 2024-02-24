@@ -1,9 +1,9 @@
 /**
  * @file Register the service worker.
  */
+import {serviceWorkerName} from "../const";
 import {fetchUpdatedServiceWorker} from "./common.js";
 import {ServiceWorkerMessageTypes} from "./messages.js";
-import {serviceWorkerName} from "../const";
 
 let loaded = false;
 let updateIntervalID: NodeJS.Timeout | number | undefined;
@@ -130,7 +130,7 @@ function onLoad(): void {
       clearInterval(updateIntervalID);
       updateIntervalID = setInterval(
         () => {
-          register(registration);
+          update(registration);
         },
         60 * 60 * 1000 /* 1h */
       );
@@ -152,10 +152,10 @@ function onLoad(): void {
 }
 
 /**
- * Register the service worker.
+ * Update the service worker.
  * @param registration The service worker registration.
  */
-function register(registration: ServiceWorkerRegistration): void {
+function update(registration: ServiceWorkerRegistration): void {
   registration.update().catch((error: unknown) => {
     console.error(`Could not register service worker with error:`, error);
   });
@@ -164,7 +164,7 @@ function register(registration: ServiceWorkerRegistration): void {
 /**
  * Register the service worker.
  */
-export function registerServiceWorker(): void {
+export function register(): void {
   if (!("serviceWorker" in navigator)) {
     fatalError(
       "Error: Browser not compatible; service workers are not available in the current browser context."

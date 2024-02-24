@@ -1,15 +1,15 @@
 /**
  * @file Functions for a client page to interact with the service worker.
  */
+import {fetchUpdatedServiceWorker} from "./common.js";
 import {
   ServiceWorkerClientMessageTypes,
   ServiceWorkerMessageTypes,
   validateMessageData
 } from "./messages.js";
-import {fetchUpdatedServiceWorker} from "./common.js";
 
 /**
- * Reload the service worker.
+ * Reload the service worker by reloading all clients.
  */
 export async function reloadServiceWorker(): Promise<void> {
   const registration = await navigator.serviceWorker.getRegistration();

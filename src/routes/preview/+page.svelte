@@ -1,11 +1,11 @@
 <script lang="ts">
   import "./style.postcss";
+  import {type Readable, readable} from "svelte/store";
+  import {browser} from "$app/environment";
   import {
     processSvg,
     type SVGProcessParameters
   } from "$lib/svgManipulator/svgManipulator";
-  import {readable, type Readable} from "svelte/store";
-  import {browser} from "$app/environment";
   import SvgPreview from "$lib/SVGPreview/SVGPreview.svelte";
 
   /**

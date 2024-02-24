@@ -3,13 +3,13 @@
  */
 
 /* eslint-disable @typescript-eslint/naming-convention */
+import type {SvelteKitPWAOptions} from "@vite-pwa/sveltekit/*";
 import {
   description,
   startupBackgroundColour,
   themeColour,
   title
 } from "../const.ts";
-import type {SvelteKitPWAOptions} from "@vite-pwa/sveltekit/*";
 
 const startUrl = "/";
 

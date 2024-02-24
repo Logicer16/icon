@@ -5,16 +5,24 @@
 import {ConfigGenerator, mergeGlobals} from "@logicer/eslint-plugin";
 import globals from "globals";
 
-const generator = new ConfigGenerator({
+/**
+ * @type {import("@logicer/eslint-plugin").ConfigOptions}
+ */
+export const options = {
+  ecmaVersion: 2022,
   javascript: true,
   jsdoc: true,
   prettier: true,
+  sourceFiles: ["src/**/*"],
   svelte: true,
+  tailwind: true,
   typescript: true
-});
+};
+
+const generator = new ConfigGenerator(options);
 
 /**
- * @type {import("eslint").Linter.FlatConfigFileSpec[]}
+ * @type {import("@logicer/eslint-plugin").FileSpec[]}
  */
 const ignores = [
   "node_modules/**/*",
@@ -40,49 +48,23 @@ const ignores = [
 ];
 
 /**
- * @type {import("eslint").Linter.FlatConfig[]}
+ * @type {import("@logicer/eslint-plugin").FlatConfig[]}
  */
 const svelteConfigs = [
   {
     languageOptions: {
-      globals: mergeGlobals(globals.browser, globals.es2017, globals.node),
+      globals: mergeGlobals(globals.browser, globals.es2020, globals.node),
       parserOptions: {
-        ecmaVersion: 2020,
         extraFileExtensions: [".svelte"],
         project: ["./tsconfig.json", "./tsconfig.*.json"],
         sourceType: "module"
       }
     }
-  },
-  {
-    files: ["src/**/*"],
-    rules: {
-      "import/no-unresolved": [
-        "error",
-        {
-          // Regex
-          ignore: [
-            "\\$app/environment",
-            "\\$app/forms",
-            "\\$app/navigation",
-            "\\$app/paths",
-            "\\$app/stores",
-            "\\$env/dynamic/private",
-            "\\$env/dynamic/public",
-            "\\$env/static/private",
-            "\\$env/static/public",
-            "\\$service-worker"
-          ]
-        }
-      ],
-      "n/no-missing-import": "off",
-      "n/prefer-global/process": ["error", "always"]
-    }
   }
 ];
 
 /**
- * @type {import("eslint").Linter.FlatConfig[]}
+ * @type {import("@logicer/eslint-plugin").FlatConfig[]}
  */
 const config = [
   {ignores},

@@ -8,6 +8,16 @@ const config = {
   preprocess: [vitePreprocess({})],
   kit: {
     adapter: adapterStatic(),
+    prerender: {
+      handleHttpError: ({path, message}) => {
+        // Ignore vips path.
+        if (path.startsWith("/vips/")) {
+          return;
+        }
+
+        throw new Error(message);
+      }
+    },
     serviceWorker: {
       register: false
     }

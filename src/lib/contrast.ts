@@ -1,9 +1,9 @@
 /**
  * @file Determine the contrast of a colour.
  */
-import {derived, readable, type Readable} from "svelte/store";
 import Color from "colorjs.io";
 import type {ColorTypes} from "colorjs.io/types/src/color";
+import {derived, type Readable, readable} from "svelte/store";
 import {prefersColorScheme} from "./prefersColourScheme.js";
 
 /**

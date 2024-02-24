@@ -1,10 +1,10 @@
 /**
  * @file Manipulates the svg icon's css.
  */
-// eslint-disable-next-line n/file-extension-in-import
-import rawSVG from "./favicon.svg?raw";
 import {themeColour} from "../const";
 import type {Vips} from "../vips/vips";
+// eslint-disable-next-line n/file-extension-in-import
+import rawSVG from "./favicon.svg?raw";
 
 export type SVGData = BlobPart & Vips.Blob;
 
