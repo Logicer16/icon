@@ -1,6 +1,4 @@
 <script lang="ts">
-  // import-js/eslint-plugin-import#1883
-  import {IconIcns, IconIco} from "@shockpkg/icon-encoder";
   import {
     getToastStore,
     ListBox,
@@ -16,8 +14,10 @@
     type DownloadFormatOptions
   } from "$lib/Download/DownloadFormat";
   import type {SVGData} from "$lib/svgManipulator/svgManipulator";
-  import {type Vips, vips} from "$lib/vips/vips";
-  import {encode as qoiEncode, type QOIDataDescription} from "qoijs";
+  import {vips} from "$lib/vips/vips";
+  import {icns} from "./formats/icns";
+  import {ico} from "./formats/ico";
+  import {qoi} from "./formats/qoi";
 
   export let svg: SVGData | undefined;
 
@@ -45,19 +45,69 @@
 
   const downloadFormatsOptions: DownloadFormatOptions[] = [
     {extension: "png"},
-    {displayName: "jpeg", extension: "jpg", mime: "jpeg"},
+    {
+      displayName: "jpeg",
+      extension: "jpg",
+      mime: "jpeg",
+      processImage: (image) => {
+        return image.jpegsaveBuffer({background: 255});
+      }
+    },
     {extension: "svg", mime: "svg+xml"},
     {extension: "gif"},
-    {extension: "webp"},
-    {displayName: "jpeg xl", extension: "jxl"},
-    {extension: "ico", mime: "x-icon"},
-    {extension: "icns", mime: "x-icns"},
-    {extension: "avif"},
+    {
+      extension: "webp",
+      processImage: (image) => {
+        return image.webpsaveBuffer({lossless: true});
+      }
+    },
+    {
+      displayName: "jpeg xl",
+      extension: "jxl",
+      processImage: (image) => {
+        return image.jxlsaveBuffer({lossless: true});
+      }
+    },
+    {
+      extension: "ico",
+      mime: "x-icon",
+      processImage: (image) => {
+        return ico(image);
+      }
+    },
+    {
+      extension: "icns",
+      mime: "x-icns",
+      processImage: (image) => {
+        return icns(image);
+      }
+    },
+    {
+      extension: "avif",
+      processImage: (image) => {
+        if (vips === undefined) return;
+        return image.heifsaveBuffer({
+          compression: vips.ForeignHeifCompression.av1,
+          lossless: true
+        });
+      }
+    },
     // Unsupported due to GPL licencing.
     // {extension: "heif"},
     {extension: "tiff"},
-    // {displayName: "jpeg 2000", extension: "jp2"},
-    {extension: "qoi"},
+    {
+      displayName: "jpeg 2000",
+      extension: "jp2",
+      processImage: (image) => {
+        return image.jp2ksaveBuffer({lossless: true});
+      }
+    },
+    {
+      extension: "qoi",
+      processImage: (image) => {
+        return qoi(image);
+      }
+    }
   ];
 
   const downloadFormats = downloadFormatsOptions.map((options) => {
@@ -92,90 +142,6 @@
     message: "Copied!"
   };
 
-/**
- * Generate an .qoi file from an image.
- * @param image The image to convert.
- * @returns Encoded ico file data.
- */
-function qoi(image: Vips.Image): ArrayBuffer | undefined {
-  if (vips === undefined) return;
-  const processedImage = image.colourspace(vips.Interpretation.srgb);
-
-  const metadata: QOIDataDescription = {
-    height: image.height,
-    width: image.width,
-    colorspace: 0,
-    channels: image.hasAlpha() ? 4 : 3
-  }
-  return qoiEncode(processedImage.writeToMemory(), metadata);
-}
-
-  /**
-   * Generate an .ico file from an image.
-   * @param image The image to convert.
-   * @returns Encoded ico file data.
-   */
-  async function ico(image: Vips.Image): Promise<Uint8Array> {
-    const ico = new IconIco();
-    const dimensions = [16, 32, 48, 64, 128, 256];
-    await Promise.all(
-      dimensions.map(async (dimension) => {
-        if (vips === undefined) {
-          throw new Error(
-            "You have somehow called a function requiring a vips image without a vips instance. Well done."
-          );
-        }
-        const png = image
-          .resize(dimension / image.width, {kernel: vips.Kernel.nearest})
-          .writeToBuffer(".png");
-        return ico.addFromPng(png, undefined, false);
-      })
-    );
-    return ico.encode();
-  }
-
-  interface IcnsType {
-    dimension: number;
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    OSTypes: string[];
-  }
-
-  /**
-   * Generate an .icns file from an image.
-   * @param image The image to convert.
-   * @returns Encoded icns file data.
-   */
-  async function icns(image: Vips.Image): Promise<Uint8Array> {
-    const icns = new IconIcns();
-    /* eslint-disable @typescript-eslint/naming-convention */
-    const dimensions: IcnsType[] = [
-      {OSTypes: ["ic10"], dimension: 1024},
-      {OSTypes: ["ic09", "ic14"], dimension: 512},
-      {OSTypes: ["ic08", "ic13"], dimension: 256},
-      {OSTypes: ["ic07"], dimension: 128},
-      {OSTypes: ["ic12"], dimension: 64},
-      {OSTypes: ["ic05", "ic11"], dimension: 32},
-      {OSTypes: ["ic04"], dimension: 16}
-    ];
-    /* eslint-enable @typescript-eslint/naming-convention */
-    await Promise.all(
-      dimensions.map(async (dimension) => {
-        if (vips === undefined) {
-          throw new Error(
-            "You have somehow called a function requiring a vips image without a vips instance. Well done."
-          );
-        }
-        const png = image
-          .resize(dimension.dimension / image.width, {
-            kernel: vips.Kernel.nearest
-          })
-          .writeToBuffer(".png");
-        return icns.addFromPng(png, dimension.OSTypes, false);
-      })
-    );
-    return icns.encode();
-  }
-
   /**
    * Generate a file for an extension.
    * @param extension The file extension corresponding to the generated file. Defaults to the value of the combo box.
@@ -193,48 +159,7 @@ function qoi(image: Vips.Image): ArrayBuffer | undefined {
     } else {
       if (vips === undefined) return;
       const image = vips.Image.svgloadBuffer(svg);
-      switch (format.extension) {
-        case "ico": {
-          data = await ico(image);
-          break;
-        }
-        case "icns": {
-          data = await icns(image);
-          break;
-        }
-        case "qoi": {
-          data = qoi(image);
-          break;
-        }
-        case "webp": {
-          data = image.webpsaveBuffer({lossless: true});
-          break;
-        }
-        case "jpg": {
-          data = image.jpegsaveBuffer({background: 255});
-          break;
-        }
-        case "jp2": {
-          data = image.jp2ksaveBuffer({lossless: true});
-          break;
-        }
-        case "jxl": {
-          data = image.jxlsaveBuffer({lossless: true});
-          break;
-        }
-        case "avif": {
-          data = image.heifsaveBuffer({
-            compression: vips.ForeignHeifCompression.av1,
-            lossless: true
-          });
-          break;
-        }
-
-        default: {
-          data = image.writeToBuffer(`.${format.extension}`);
-          break;
-        }
-      }
+      data = await format.processImage(image);
     }
 
     if (data === undefined) return;
