@@ -1,8 +1,8 @@
 /**
  * @file Methods for generating an icns file.
  */
-import {vips, type Vips} from "$lib/vips/vips";
 import {IconIco} from "@shockpkg/icon-encoder";
+import {type Vips, vips} from "$lib/vips/vips";
 
 /**
  * Generate an .ico file from an image.

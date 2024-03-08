@@ -1,8 +1,8 @@
 /**
  * @file Methods for generating an ico file.
  */
-import {vips, type Vips} from "$lib/vips/vips";
 import {IconIcns} from "@shockpkg/icon-encoder";
+import {type Vips, vips} from "$lib/vips/vips";
 
 interface IcnsType {
   dimension: number;

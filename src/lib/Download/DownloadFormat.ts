@@ -3,35 +3,43 @@
  */
 import type {Vips} from "$lib/vips/vips";
 
-type ProcessImage = (
-  image: Vips.Image
-) => BlobPart | undefined | Promise<BlobPart | undefined>;
+type ImageResult = BlobPart | Promise<BlobPart | undefined> | undefined;
+
+type ImageProcessor = (image: Vips.Image, extension: string) => ImageResult;
 
 export interface DownloadFormatOptions {
   additionalExtensions?: string[];
   displayName?: string;
   extension: string;
   mime?: string;
-  processImage?: ProcessImage;
+  imageProcessor?: ImageProcessor;
 }
 
 export class DownloadFormat {
   private additionalExtensions?: string[];
   private definedDisplayName?: string;
   public readonly extension: string;
-  public processImage: ProcessImage;
+  private imageProcessor: ImageProcessor;
   private rawMime?: string;
 
   constructor(options: DownloadFormatOptions) {
     this.additionalExtensions = options.additionalExtensions;
     this.definedDisplayName = options.displayName;
     this.extension = options.extension;
-    this.processImage = options.processImage ?? this.defaultProcessImage;
+    this.imageProcessor =
+      options.imageProcessor ?? DownloadFormat.defaultImageProcessor;
     this.rawMime = options.mime;
   }
 
-  private defaultProcessImage(image: Vips.Image): BlobPart {
-    return image.writeToBuffer(`.${this.extension}`);
+  private static defaultImageProcessor(
+    image: Vips.Image,
+    extension: string
+  ): BlobPart {
+    return image.writeToBuffer(`.${extension}`);
+  }
+
+  public processImage(image: Vips.Image): ImageResult {
+    return this.imageProcessor(image, this.extension);
   }
 
   public get displayName(): string {

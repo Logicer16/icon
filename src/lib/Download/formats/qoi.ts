@@ -1,8 +1,8 @@
 /**
  * @file Methods for generating a qoi file.
  */
-import {vips, type Vips} from "$lib/vips/vips";
 import {encode as qoiEncode, type QOIDataDescription} from "qoijs";
+import {type Vips, vips} from "$lib/vips/vips";
 
 /**
  * Generate an .qoi file from an image.
@@ -14,10 +14,10 @@ export function qoi(image: Vips.Image): ArrayBuffer | undefined {
   const processedImage = image.colourspace(vips.Interpretation.srgb);
 
   const metadata: QOIDataDescription = {
-    height: image.height,
-    width: image.width,
+    channels: image.hasAlpha() ? 4 : 3,
     colorspace: 0,
-    channels: image.hasAlpha() ? 4 : 3
+    height: image.height,
+    width: image.width
   };
   return qoiEncode(processedImage.writeToMemory(), metadata);
 }

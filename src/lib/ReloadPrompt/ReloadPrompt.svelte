@@ -23,7 +23,7 @@
    * Reload the service worker.
    */
   function reload(): void {
-    reloadServiceWorker().catch((error) => {
+    reloadServiceWorker().catch((error: unknown) => {
       throw error;
     });
   }

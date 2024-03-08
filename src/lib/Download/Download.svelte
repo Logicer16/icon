@@ -15,9 +15,9 @@
   } from "$lib/Download/DownloadFormat";
   import type {SVGData} from "$lib/svgManipulator/svgManipulator";
   import {vips} from "$lib/vips/vips";
-  import {icns} from "./formats/icns";
-  import {ico} from "./formats/ico";
-  import {qoi} from "./formats/qoi";
+  import {icns} from "./formats/icns.ts";
+  import {ico} from "./formats/ico.ts";
+  import {qoi} from "./formats/qoi.ts";
 
   export let svg: SVGData | undefined;
 
@@ -48,43 +48,39 @@
     {
       displayName: "jpeg",
       extension: "jpg",
-      mime: "jpeg",
-      processImage: (image) => {
+      imageProcessor: (image): Uint8Array => {
         return image.jpegsaveBuffer({background: 255});
-      }
+      },
+      mime: "jpeg"
     },
     {extension: "svg", mime: "svg+xml"},
     {extension: "gif"},
     {
       extension: "webp",
-      processImage: (image) => {
+      imageProcessor: (image): Uint8Array => {
         return image.webpsaveBuffer({lossless: true});
       }
     },
     {
       displayName: "jpeg xl",
       extension: "jxl",
-      processImage: (image) => {
+      imageProcessor: (image): Uint8Array => {
         return image.jxlsaveBuffer({lossless: true});
       }
     },
     {
       extension: "ico",
-      mime: "x-icon",
-      processImage: (image) => {
-        return ico(image);
-      }
+      imageProcessor: ico,
+      mime: "x-icon"
     },
     {
       extension: "icns",
-      mime: "x-icns",
-      processImage: (image) => {
-        return icns(image);
-      }
+      imageProcessor: icns,
+      mime: "x-icns"
     },
     {
       extension: "avif",
-      processImage: (image) => {
+      imageProcessor: (image): Uint8Array | undefined => {
         if (vips === undefined) return;
         return image.heifsaveBuffer({
           compression: vips.ForeignHeifCompression.av1,
@@ -98,15 +94,13 @@
     {
       displayName: "jpeg 2000",
       extension: "jp2",
-      processImage: (image) => {
+      imageProcessor: (image): Uint8Array => {
         return image.jp2ksaveBuffer({lossless: true});
       }
     },
     {
       extension: "qoi",
-      processImage: (image) => {
-        return qoi(image);
-      }
+      imageProcessor: qoi
     }
   ];
 
