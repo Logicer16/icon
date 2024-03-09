@@ -14,12 +14,45 @@ let shouldAutoReload: true | undefined;
 // Support is not yet universal and no features of the site rely on unsecured external resources.
 const coepCredentialless = false;
 
+const googleUserAgentKeywords = [
+  "Googlebot",
+  "Storebot-Google",
+  "Google-InspectionTool",
+  "GoogleOther",
+  "APIs-Google",
+  "AdsBot-Google",
+  "Mediapartners-Google",
+  "Google-Safety",
+  "FeedFetcher-Google",
+  "GoogleProducer",
+  "Google-Read-Aloud",
+  "google-speakr",
+  "Google-Site-Verification",
+  "DuplexWeb-Google",
+  "googleweblight",
+  "AdsBot-Google- Mobile-Apps",
+  "Google Favicon"
+];
+
+/**
+ * Checks the browser's user agent to see if the page has been loaded by one of Google's web crawlers.
+ * @returns True if the browser is a Google web crawler, otherwise false.
+ */
+function isGoogle(): boolean {
+  const userAgent = window.navigator.userAgent;
+  return googleUserAgentKeywords.some((keyword) => {
+    return userAgent.includes(keyword);
+  });
+}
+
 /**
  * Initialise the `shouldAutoReload` based on the attributes of the html tag responsible for loading this script.
  */
 export function initShouldAutoReload(): void {
   if (
-    document.currentScript?.getAttribute("data-should-auto-reload") === "true"
+    document.currentScript?.getAttribute("data-should-auto-reload") ===
+      "true" &&
+    !isGoogle()
   ) {
     shouldAutoReload = true;
   }
