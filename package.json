@@ -54,7 +54,7 @@
     "ts-plugin-type-coverage": "^2.26.4",
     "tslib": "^2.6.2",
     "type-coverage": "^2.27.1",
-    "typescript": "^5.2.2",
+    "typescript": "^5.4.3",
     "typescript-svelte-plugin": "^0.3.34",
     "vite": "^4.5.0",
     "vite-plugin-node-polyfills": "^0.15.0",
