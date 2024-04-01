@@ -16,7 +16,7 @@ devDependencies:
     version: 2.0.2
   '@logicer/tsconfig':
     specifier: ^4.0.0
-    version: 4.0.0(ts-plugin-type-coverage@2.26.4)(typescript@5.2.2)
+    version: 4.0.0(ts-plugin-type-coverage@2.27.2)(typescript@5.2.2)
   '@primer/octicons':
     specifier: ^19.8.0
     version: 19.8.0
@@ -96,8 +96,8 @@ devDependencies:
     specifier: 11.0.0-beta.1
     version: 11.0.0-beta.1(@types/node@20.11.16)(typescript@5.2.2)
   ts-plugin-type-coverage:
-    specifier: ^2.26.4
-    version: 2.26.4(typescript@5.2.2)
+    specifier: ^2.27.2
+    version: 2.27.2(typescript@5.2.2)
   tslib:
     specifier: ^2.6.2
     version: 2.6.2
@@ -1736,13 +1736,13 @@ packages:
     engines: {node: ^20.8.0}
     dev: true
 
-  /@logicer/tsconfig@4.0.0(ts-plugin-type-coverage@2.26.4)(typescript@5.2.2):
+  /@logicer/tsconfig@4.0.0(ts-plugin-type-coverage@2.27.2)(typescript@5.2.2):
     resolution: {integrity: sha512-/VXK+sPJgAh3JfDAOXihXBWHsjkW0bauJhv/oxbg/jcZySdFPTG2y9nLj41OT88BWfMrvpgVgLnEaiNEO401DA==}
     peerDependencies:
       ts-plugin-type-coverage: ^2.25.0
       typescript: '>=5'
     dependencies:
-      ts-plugin-type-coverage: 2.26.4(typescript@5.2.2)
+      ts-plugin-type-coverage: 2.27.2(typescript@5.2.2)
       typescript: 5.2.2
     dev: true
 
@@ -4697,6 +4697,7 @@ packages:
   /min-indent@1.0.1:
     resolution: {integrity: sha512-I9jwMn07Sy/IwOj3zVkVik2JTvgpaykDZEigL6Rx6N9LbMywwUSMtxET+7lVoDLLd3O3IXwJwvuuns8UB/HeAg==}
     engines: {node: '>=4'}
+    requiresBuild: true
     dev: true
 
   /mini-svg-data-uri@1.4.4:
@@ -6287,13 +6288,13 @@ packages:
       v8-compile-cache-lib: 3.0.1
     dev: true
 
-  /ts-plugin-type-coverage@2.26.4(typescript@5.2.2):
-    resolution: {integrity: sha512-6wdOCmEhkw3BkofRsjkri50hHwMQ45QZa96do8rqpOKjdQ9xtNWH1DO/H/JeHAcotbO7nfYTaEnB9iUuvtn5Yg==}
+  /ts-plugin-type-coverage@2.27.2(typescript@5.2.2):
+    resolution: {integrity: sha512-ONCUpyQOWFH/kunugC5JoFrLqaGeq4dD4mPSb4QnGaHbgoJw8hQSO3Nb7Smmw9JANcRPfcAyhWv7cJTIapWdJw==}
     peerDependencies:
       typescript: 2 || 3 || 4 || 5
     dependencies:
       tslib: 2.6.2
-      type-coverage-core: 2.26.3(typescript@5.2.2)
+      type-coverage-core: 2.27.2(typescript@5.2.2)
       typescript: 5.2.2
     dev: true
 
@@ -6335,8 +6336,8 @@ packages:
       prelude-ls: 1.2.1
     dev: true
 
-  /type-coverage-core@2.26.3(typescript@5.2.2):
-    resolution: {integrity: sha512-rzNdW/tClHJvsUiy787b/UX53bNh1Dn7A5KqZDQjkL3j7iKFv/KnTolxDBBgTPcK4Zn9Ab7WLrik7cXw2oZZqw==}
+  /type-coverage-core@2.27.1(typescript@5.2.2):
+    resolution: {integrity: sha512-W+PMYbhUsq+UWkrb7UkmyO7zF3zt4qZuQukyDM6eaiCIkMJclcVmR3O02clDk4FKpKPbzHictOmoIu3fYp+53g==}
     peerDependencies:
       typescript: 2 || 3 || 4 || 5
     dependencies:
@@ -6348,8 +6349,8 @@ packages:
       typescript: 5.2.2
     dev: true
 
-  /type-coverage-core@2.27.1(typescript@5.2.2):
-    resolution: {integrity: sha512-W+PMYbhUsq+UWkrb7UkmyO7zF3zt4qZuQukyDM6eaiCIkMJclcVmR3O02clDk4FKpKPbzHictOmoIu3fYp+53g==}
+  /type-coverage-core@2.27.2(typescript@5.2.2):
+    resolution: {integrity: sha512-Iehy4Ap4n0DR21ag4YIIyU5kiRwvohRel37vfMbA0MP7/XMmm1UCfCb2Cz/WNLej/f/TlLwqg5RBgoR6kqoZ0g==}
     peerDependencies:
       typescript: 2 || 3 || 4 || 5
     dependencies:
@@ -6836,6 +6837,7 @@ packages:
 
   /workbox-google-analytics@7.0.0:
     resolution: {integrity: sha512-MEYM1JTn/qiC3DbpvP2BVhyIH+dV/5BjHk756u9VbwuAhu0QHyKscTnisQuz21lfRpOwiS9z4XdqeVAKol0bzg==}
+    deprecated: It is not compatible with newer versions of GA starting with v4, as long as you are using GAv3 it should be ok, but the package is not longer being maintained
     dependencies:
       workbox-background-sync: 7.0.0
       workbox-core: 7.0.0
