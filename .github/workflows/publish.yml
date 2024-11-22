@@ -39,7 +39,7 @@ jobs:
       - name: Check
         run: pnpm check --output machine
 
-      - name: Type Converage
+      - name: Type Coverage
         run: pnpm type-coverage
 
       - name: Run ESLint
