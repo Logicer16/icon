@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	viewBox="0 0 256 256" style="enable-background:new 0 0 256 256;" xml:space="preserve">
+<defs>
+	<linearGradient id="grad" x1="0%" y1="0%" x2="0%" y2="100%" spreadMethod="repeat" gradientTransform="rotate(-30) scale(10)">
+		<animate attributeName="y1" dur="15s" repeatCount="indefinite" from="0%" to="100%" />
+		<animate attributeName="y2" dur="15s" repeatCount="indefinite" from="100%" to="200%" />
+		<!-- I hate SVG gradients -->
+		<stop offset="0%" stop-color="lch(100% 40% 0)" />
+		<stop offset="1.25%" stop-color="lch(100% 40% 4.5)" />
+		<stop offset="2.5%" stop-color="lch(100% 40% 9)" />
+		<stop offset="3.75%" stop-color="lch(100% 40% 13.5)" />
+		<stop offset="5%" stop-color="lch(100% 40% 18)" />
+		<stop offset="6.25%" stop-color="lch(100% 40% 22.5)" />
+		<stop offset="7.5%" stop-color="lch(100% 40% 27)" />
+		<stop offset="8.75%" stop-color="lch(100% 40% 31.5)" />
+		<stop offset="10%" stop-color="lch(100% 40% 36)" />
+		<stop offset="11.25%" stop-color="lch(100% 40% 40.5)" />
+		<stop offset="12.5%" stop-color="lch(100% 40% 45)" />
+		<stop offset="13.75%" stop-color="lch(100% 40% 49.5)" />
+		<stop offset="15%" stop-color="lch(100% 40% 54)" />
+		<stop offset="16.25%" stop-color="lch(100% 40% 58.5)" />
+		<stop offset="17.5%" stop-color="lch(100% 40% 63)" />
+		<stop offset="18.75%" stop-color="lch(100% 40% 67.5)" />
+		<stop offset="20%" stop-color="lch(100% 40% 72)" />
+		<stop offset="21.25%" stop-color="lch(100% 40% 76.5)" />
+		<stop offset="22.5%" stop-color="lch(100% 40% 81)" />
+		<stop offset="23.75%" stop-color="lch(100% 40% 85.5)" />
+		<stop offset="25%" stop-color="lch(100% 40% 90)" />
+		<stop offset="26.25%" stop-color="lch(100% 40% 94.5)" />
+		<stop offset="27.5%" stop-color="lch(100% 40% 99)" />
+		<stop offset="28.75%" stop-color="lch(100% 40% 103.5)" />
+		<stop offset="30%" stop-color="lch(100% 40% 108)" />
+		<stop offset="31.25%" stop-color="lch(100% 40% 112.5)" />
+		<stop offset="32.5%" stop-color="lch(100% 40% 117)" />
+		<stop offset="33.75%" stop-color="lch(100% 40% 121.5)" />
+		<stop offset="35%" stop-color="lch(100% 40% 126)" />
+		<stop offset="36.25%" stop-color="lch(100% 40% 130.5)" />
+		<stop offset="37.5%" stop-color="lch(100% 40% 135)" />
+		<stop offset="38.75%" stop-color="lch(100% 40% 139.5)" />
+		<stop offset="40%" stop-color="lch(100% 40% 144)" />
+		<stop offset="41.25%" stop-color="lch(100% 40% 148.5)" />
+		<stop offset="42.5%" stop-color="lch(100% 40% 153)" />
+		<stop offset="43.75%" stop-color="lch(100% 40% 157.5)" />
+		<stop offset="45%" stop-color="lch(100% 40% 162)" />
+		<stop offset="46.25%" stop-color="lch(100% 40% 166.5)" />
+		<stop offset="47.5%" stop-color="lch(100% 40% 171)" />
+		<stop offset="48.75%" stop-color="lch(100% 40% 175.5)" />
+		<stop offset="50%" stop-color="lch(100% 40% 180)" />
+		<stop offset="51.25%" stop-color="lch(100% 40% 184.5)" />
+		<stop offset="52.5%" stop-color="lch(100% 40% 189)" />
+		<stop offset="53.75%" stop-color="lch(100% 40% 193.5)" />
+		<stop offset="55%" stop-color="lch(100% 40% 198)" />
+		<stop offset="56.25%" stop-color="lch(100% 40% 202.5)" />
+		<stop offset="57.5%" stop-color="lch(100% 40% 207)" />
+		<stop offset="58.75%" stop-color="lch(100% 40% 211.5)" />
+		<stop offset="60%" stop-color="lch(100% 40% 216)" />
+		<stop offset="61.25%" stop-color="lch(100% 40% 220.5)" />
+		<stop offset="62.5%" stop-color="lch(100% 40% 225)" />
+		<stop offset="63.75%" stop-color="lch(100% 40% 229.5)" />
+		<stop offset="65%" stop-color="lch(100% 40% 234)" />
+		<stop offset="66.25%" stop-color="lch(100% 40% 238.5)" />
+		<stop offset="67.5%" stop-color="lch(100% 40% 243)" />
+		<stop offset="68.75%" stop-color="lch(100% 40% 247.5)" />
+		<stop offset="70%" stop-color="lch(100% 40% 252)" />
+		<stop offset="71.25%" stop-color="lch(100% 40% 256.5)" />
+		<stop offset="72.5%" stop-color="lch(100% 40% 261)" />
+		<stop offset="73.75%" stop-color="lch(100% 40% 265.5)" />
+		<stop offset="75%" stop-color="lch(100% 40% 270)" />
+		<stop offset="76.25%" stop-color="lch(100% 40% 274.5)" />
+		<stop offset="77.5%" stop-color="lch(100% 40% 279)" />
+		<stop offset="78.75%" stop-color="lch(100% 40% 283.5)" />
+		<stop offset="80%" stop-color="lch(100% 40% 288)" />
+		<stop offset="81.25%" stop-color="lch(100% 40% 292.5)" />
+		<stop offset="82.5%" stop-color="lch(100% 40% 297)" />
+		<stop offset="83.75%" stop-color="lch(100% 40% 301.5)" />
+		<stop offset="85%" stop-color="lch(100% 40% 306)" />
+		<stop offset="86.25%" stop-color="lch(100% 40% 310.5)" />
+		<stop offset="87.5%" stop-color="lch(100% 40% 315)" />
+		<stop offset="88.75%" stop-color="lch(100% 40% 319.5)" />
+		<stop offset="90%" stop-color="lch(100% 40% 324)" />
+		<stop offset="91.25%" stop-color="lch(100% 40% 328.5)" />
+		<stop offset="92.5%" stop-color="lch(100% 40% 333)" />
+		<stop offset="93.75%" stop-color="lch(100% 40% 337.5)" />
+		<stop offset="95%" stop-color="lch(100% 40% 342)" />
+		<stop offset="96.25%" stop-color="lch(100% 40% 346.5)" />
+		<stop offset="97.5%" stop-color="lch(100% 40% 351)" />
+		<stop offset="98.75%" stop-color="lch(100% 40% 355.5)" />
+		<stop offset="100%" stop-color="lch(100% 40% 360)" />
+	</linearGradient>
+</defs>
+<g id="Outline">
+	<rect x="80" y="16" width="96" height="16"/>
+	<rect x="48" y="32" width="32" height="16"/>
+	<rect x="32" y="48" width="16" height="32"/>
+	<rect x="16" y="80" width="16" height="96"/>
+	<rect x="64" y="96" width="32" height="64"/>
+	<rect x="32" y="176" width="16" height="48"/>
+	<rect x="48" y="224" width="48" height="16"/>
+	<rect x="96" y="208" width="64" height="16"/>
+	<rect x="160" y="224" width="48" height="16"/>
+	<rect x="208" y="176" width="16" height="48"/>
+	<rect x="224" y="80" width="16" height="96"/>
+	<rect x="208" y="48" width="16" height="32"/>
+	<rect x="176" y="32" width="32" height="16"/>
+	<rect x="160" y="96" width="32" height="64"/>
+</g>
+<g id="Fill">
+	<path fill="url(#grad)" d="
+	M208,80V48H176V32H80V48H48V80H32V176H48V224H96V208H160V224H208V176H224V80H208z
+	M96,160 H64V96H96V160z
+	M192,160 H160V96H192V160z"/>
+</g>
+</svg>

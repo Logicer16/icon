@@ -1,5 +1,5 @@
 <h1 align="center">
-<img width="50%" src="https://github.com/Logicer16/icon/raw/main/static/favicon/favicon.svg">
+<img width="50%" src="https://github.com/Logicer16/icon/raw/main/icon%20rainbow.svg">
 <br>
 Logicer's Icon Generator
 </h1>
